@@ -1,6 +1,16 @@
+https://solbel.tistory.com/886 - [vue.js] axios 사용시 폼 데이터 전송하기 (+파일 업로드) [펌]
+
+axios 의 post 기능은 기본적으로 폼 데이터 전송방식을 사용하지 않기 때문에...
+
+---
+
+https://choice91.tistory.com/73 - express req.body req.params req.query
+
 https://uxgjs.tistory.com/138 - vue axios 파일 업로드
 
 https://joshua1988.github.io/vue-camp/vue3.html#라이프-사이클-훅 - - vue3 ref reactive
+
+https://v3.ko.vuejs.org/api/composition-api.html#setup - vue 컴포지션 api
 
 ---
 

@@ -1,9 +1,13 @@
 <template>
   <div>
-    <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" /> -->
-    <span>{{ state }}</span>
+    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
     <br />
     <router-link to="/videos/upload">upload</router-link>
+
+    <h1 v-if="state.temp == 0">&nbsp;-&nbsp;</h1>
+    <h1 v-else>{{ state.temp }}</h1>
+    <button @click="add">add</button>
+    <button @click="minus">add</button>
   </div>
 </template>
 
@@ -15,7 +19,7 @@ import { instance } from "../main";
 export default defineComponent({
   name: "Home",
   components: {
-    // HelloWorld,
+    HelloWorld,
   },
   setup(props, context) {
     console.log("props : ", props);
@@ -23,6 +27,7 @@ export default defineComponent({
 
     const state = reactive({
       data: null,
+      temp: 0,
     });
 
     const fetch = {
@@ -37,9 +42,17 @@ export default defineComponent({
       },
     };
 
+    const add = () => {
+      state.temp += 1;
+    };
+
+    const minus = () => {
+      state.temp -= 1;
+    };
+
     fetch.init();
 
-    return { state };
+    return { state, add, minus };
   },
 });
 </script>

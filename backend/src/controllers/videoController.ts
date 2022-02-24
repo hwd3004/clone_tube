@@ -14,8 +14,17 @@ export const home = async (req: Request, res: Response) => {
   return res.send({ pageTitle: "home", videos });
 };
 
-export const see = (req: Request, res: Response) => {
-  return res.send(`watch ${req.params.id}`);
+export const watch = async (req: Request, res: Response) => {
+  const {
+    params: { id },
+  } = req;
+
+  const video = await Video.findById(id);
+
+  return res.send({
+    pageTitle: video.title,
+    video,
+  });
 };
 export const edit = (req: Request, res: Response) => res.send("Edit");
 export const search = (req: Request, res: Response) => res.send("Search");
@@ -24,6 +33,8 @@ export const deleteVideo = (req: Request, res: Response) => res.send("Delete Vid
 
 export const postUpload = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
+
     const { title, description, hashtags } = req.body;
     const video = await Video.create({
       title: title,
@@ -37,7 +48,7 @@ export const postUpload = async (req: Request, res: Response) => {
 
     console.log(video);
 
-    return res.send("uploaded");
+    return res.send(200);
   } catch (error) {
     console.log(error);
     return res.send({
