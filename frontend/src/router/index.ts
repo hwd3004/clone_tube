@@ -1,16 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
-import Upload from "../views/Upload.vue";
+import Upload from "../views/videos/Upload.vue";
+import Watch from "../views/videos/Watch.vue";
+import Edit from "../views/videos/Edit.vue";
+import PageNotFound from "../components/PageNotFound.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Home",
     component: Home,
   },
   {
     path: "/about",
-    name: "About",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -18,13 +19,25 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/videos/upload",
-    name: "Upload",
     component: Upload,
+  },
+  {
+    path: "/videos/:id",
+    component: Watch,
+  },
+  {
+    path: "/videos/:id/edit",
+    component: Edit,
+  },
+  {
+    path: "/:pathMatch(.*)",
+    component: PageNotFound,
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  // history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes,
 });
 

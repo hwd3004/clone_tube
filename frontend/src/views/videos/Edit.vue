@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>Video Edit</h1>
     <form id="form" v-on:submit.prevent="handleSubmit">
       <input
         type="text"
@@ -34,10 +35,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from "@vue/runtime-core";
-import { instance } from "../main";
+import { instance } from "../../main";
 
 export default defineComponent({
-  name: "Upload",
   setup(props, context) {
     const state = reactive({
       data: null,
@@ -48,22 +48,38 @@ export default defineComponent({
   data() {
     return {
       form: {
-        title: "dummy title",
-        description:
-          "dummy description dummy description dummy description dummy description",
-        hashtags: "dummy hashtags",
+        title: "",
+        description: "",
+        hashtags: "",
       },
     };
+  },
+  mounted() {
+    const fetch = {
+      init: async () => {
+        const res = await instance.get(location.pathname);
+
+        const {
+          title,
+          description,
+          hashtags,
+        }: { title: string; description: string; hashtags: [] } =
+          res.data.video;
+
+        this.form.title = title;
+        this.form.description = description;
+        this.form.hashtags = hashtags.join();
+      },
+    };
+    fetch.init();
   },
   methods: {
     handleSubmit(e: Event) {
       console.log(this.form);
-
       const post = async () => {
-        const res = await instance.post("/videos/upload", this.form);
+        const res = await instance.post(location.pathname, this.form);
         console.log(res);
       };
-
       post();
     },
   },

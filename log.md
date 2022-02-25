@@ -4,6 +4,32 @@ https://solbel.tistory.com/886 - [vue.js] axios 사용시 폼 데이터 전송�
 
 axios 의 post 기능은 기본적으로 폼 데이터 전송방식을 사용하지 않기 때문에...
 
+https://goddino.tistory.com/117 - vue 동적 라우팅
+
+https://archijude.tistory.com/385 - vue 404 에러 핸들링
+
+---
+
+https://typescript-kr.github.io/pages/variable-declarations.html
+
+타입스크립트 구조 분해 할당 후 타입 지정
+
+```typescript
+let { a, b }: { a: string; b: number } = o;
+```
+
+---
+
+https://v3.ko.vuejs.org/guide/composition-api-setup.html#setup
+
+```
+WARNING
+
+props는 반응성이 있습니다. 그러나 ES6의 구조분해할당을 사용한다면 props의 반응성이 제거됩니다.
+
+props의 구조분해할당이 필요한 경우, setup펑션의 toRefs를 사용하여 반응성을 유지할 수 있습니다.
+```
+
 ---
 
 https://choice91.tistory.com/73 - express req.body req.params req.query
@@ -96,11 +122,3 @@ create()을 하게 되면 save()를 생략할 수 있습니다.
 create()이 다음 미들웨어인 save()를 트리거하기 때문입니다.
 
 https://mongoosejs.com/docs/api.html#model_Model.create
-
----
-
-ssh djun95@natoo.co
-
-NatooManager 폴더
-
-/hospital/

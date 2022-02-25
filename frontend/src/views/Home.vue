@@ -1,13 +1,27 @@
 <template>
   <div>
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" /> -->
+    <div v-for="(videos, index) in state.videos" v-bind:key="index">
+      <div>
+        <p>{{ videos._id }}</p>
+        <p>
+          <!-- https://goddino.tistory.com/117 - vue 동적 라우팅 -->
+          <router-link v-bind:to="`/videos/${videos._id}`">{{
+            videos.title
+          }}</router-link>
+        </p>
+        <p>{{ videos.description }}</p>
+        <p>{{ videos.hashtags }}</p>
+        <hr />
+      </div>
+    </div>
     <br />
-    <router-link to="/videos/upload">upload</router-link>
+    <router-link to="/videos/upload"><button>upload</button></router-link>
 
     <h1 v-if="state.temp == 0">&nbsp;-&nbsp;</h1>
     <h1 v-else>{{ state.temp }}</h1>
     <button @click="add">add</button>
-    <button @click="minus">add</button>
+    <button @click="minus">minus</button>
   </div>
 </template>
 
@@ -17,9 +31,8 @@ import HelloWorld from "../components/HelloWorld.vue"; // @ is an alias to /src
 import { instance } from "../main";
 
 export default defineComponent({
-  name: "Home",
   components: {
-    HelloWorld,
+    // HelloWorld,
   },
   setup(props, context) {
     console.log("props : ", props);
@@ -28,14 +41,16 @@ export default defineComponent({
     const state = reactive({
       data: null,
       temp: 0,
+      videos: [],
     });
 
     const fetch = {
       init: async () => {
         try {
           const res = await instance.get("/");
-          console.log(res);
-          state.data = res.data;
+          // console.log(res);
+          // state.data = res.data;
+          state.videos = res.data.videos;
         } catch (error) {
           console.error(error);
         }

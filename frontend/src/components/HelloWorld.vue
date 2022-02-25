@@ -9,7 +9,6 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "HelloWorld",
   setup(props, context) {
     console.log("HelloWorld props : ", props);
   },
