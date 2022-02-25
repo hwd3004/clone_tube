@@ -59,19 +59,32 @@ export const getEdit = async (req: Request, res: Response) => {
 };
 export const postEdit = async (req: Request, res: Response) => {
   try {
-    console.log("postEdit");
+    // console.log("postEdit");
     const {
       params: { id },
     } = req;
 
     const { title, description, hashtags }: { title: string; description: string; hashtags: string } = req.body;
 
-    /*
     // mongoose로 데이터를 불러와서 수정하고 저장하는 방법 1
-    const video = await Video.findById(id);
-    ...
-    await video.save();
-    */
+    // const video = await Video.findById(id);
+
+    // if (!video) {
+    //   return res.send({ status: 404, errorMsg: "Video not found." });
+    // }
+
+    // video.title = title;
+    // video.description = description;
+    // // video.hashtags = hashtags.split(",").map((word) => (word.startsWith("#") ? word : `#${word.trim()}`));
+
+    // // middleware에서 pre 사용
+    // // video.hashtags = hashtags;
+
+    // await video.save();
+
+    //
+    //
+    //
 
     // mongoose로 데이터를 불러와서 수정하고 저장하는 방법 2
     const video = await Video.exists({ _id: id });
@@ -91,34 +104,35 @@ export const postEdit = async (req: Request, res: Response) => {
       }),
     });
 
-    return res.send(200);
+    return res.sendStatus(200);
   } catch (error) {
     return res.send({ status: 500, errorMsg: "Internal Server Error" });
   }
 };
 
 export const search = (req: Request, res: Response) => res.send("Search");
-export const deleteVideo = (req: Request, res: Response) => res.send("Delete Video");
+export const deleteVideo = (req: Request, res: Response) => {
+  const {params}=req
+  return res.send("Delete Video");
+};
 
 export const getUpload = (req: Request, res: Response) => res.send("Upload");
 export const postUpload = async (req: Request, res: Response) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
 
     const { title, description, hashtags } = req.body;
-    const video = await Video.create({
+    await Video.create({
       title,
       description,
-      hashtags: hashtags.split(",").map((word: string) => `#${word}`),
+      hashtags: hashtags.split(",").map((word: string) => `#${word.trim()}`),
       meta: {
         views: 0,
         rating: 0,
       },
     });
 
-    console.log(video);
-
-    return res.send(200);
+    return res.sendStatus(200);
   } catch (error) {
     console.log(error);
     return res.send({
