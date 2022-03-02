@@ -9,6 +9,8 @@
     <router-link v-bind:to="`/videos/${state.video._id}/edit`"
       ><button>Edit</button></router-link
     >
+    &nbsp;
+    <button @click="fetch.delete">Delete</button>
   </div>
   <div v-else>
     <PageNotFound />
@@ -19,6 +21,7 @@
 import { defineComponent, reactive } from "@vue/runtime-core";
 import { instance } from "../../main";
 import PageNotFound from "../../components/PageNotFound.vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -28,10 +31,13 @@ export default defineComponent({
     const state = reactive({
       video: {
         type: Object,
+        _id: 0,
         hashtags: "",
       },
       status: 200,
     });
+
+    const router = useRouter();
 
     const fetch = {
       init: async () => {
@@ -56,11 +62,25 @@ export default defineComponent({
           console.log(error);
         }
       },
+      delete: async () => {
+        try {
+          // https://youtu.be/hY7F7U8qDPA?t=215 - Building a Web app with Vue Router, Typescript and Vue Composition API
+          // https://sunny921.github.io/posts/vuejs-router-03/
+          const res = await instance.get(`/videos/${state.video._id}/delete`);
+          if (res.data.status == 200) {
+            router.push({ path: "/" });
+          } else {
+            console.log(res.data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
     };
 
     fetch.init();
 
-    return { state };
+    return { state, fetch };
   },
 });
 </script>

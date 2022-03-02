@@ -57,6 +57,7 @@ export const getEdit = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const postEdit = async (req: Request, res: Response) => {
   try {
     // console.log("postEdit");
@@ -111,9 +112,26 @@ export const postEdit = async (req: Request, res: Response) => {
 };
 
 export const search = (req: Request, res: Response) => res.send("Search");
-export const deleteVideo = (req: Request, res: Response) => {
-  const {params}=req
-  return res.send("Delete Video");
+
+export const deleteVideo = async (req: Request, res: Response) => {
+  try {
+    const {
+      params: { id },
+    } = req;
+
+    await Video.findByIdAndDelete(id);
+
+    // Model.findOneAndDelete()
+    // Model.findOneAndRemove()
+    // 이 둘은 정말 약간의 차이가 있는데 대부분의 상황에서 타당한 이유가 없는 한 delete를 사용하라고 되어 있음.
+    // https://www.zerocho.com/category/MongoDB/post/579ecb1fc097d015000404dd
+    // 몽고 db는 롤백이 안되서 remove를 하면 다시 되돌릴 수 없기에 remove보다 delete를 사용하라고 권장하는듯
+
+    return res.send({ status: 200 });
+  } catch (error) {
+    console.log(error);
+    return res.send({ status: 500, errorMsg: "Cannot Delete Video." });
+  }
 };
 
 export const getUpload = (req: Request, res: Response) => res.send("Upload");

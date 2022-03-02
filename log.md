@@ -122,3 +122,8 @@ create()을 하게 되면 save()를 생략할 수 있습니다.
 create()이 다음 미들웨어인 save()를 트리거하기 때문입니다.
 
 https://mongoosejs.com/docs/api.html#model_Model.create
+
+---
+
+https://youtu.be/hY7F7U8qDPA?t=215 - vue router progmatimmatic routing
+https://sunny921.github.io/posts/vuejs-router-03/ - (Vue.js) 라우터 기초 (3) - push, replace, go 사용법

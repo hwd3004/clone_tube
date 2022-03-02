@@ -32,8 +32,6 @@
     </form>
 
     <br />
-
-    <button @click="handleDelete">Delete</button>
   </div>
 </template>
 
@@ -85,17 +83,6 @@ export default defineComponent({
         console.log(res);
       };
       post();
-    },
-    handleDelete() {
-      const deleteVideo = async () => {
-        // console.log(`${location.pathname.split("/edit")[0]}/delete`);
-        const res = await instance.get(
-          `${location.pathname.split("/edit")[0]}/delete`
-        );
-
-        console.log(res);
-      };
-      deleteVideo();
     },
   },
 });
