@@ -7,7 +7,9 @@
 
     <SearchForm />
 
-    <router-view />
+    <!-- https://pilot376.tistory.com/58 -->
+    <!-- 쿼리 스트링 변경 시 Vue.js Router 현재 페이지 갱신하기 -->
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 

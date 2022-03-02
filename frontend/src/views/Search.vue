@@ -1,23 +1,35 @@
 <template>
   <div>
-    <h1>search</h1>
+    <Videos />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-import { instance } from "../main";
+import { defineComponent, onUnmounted } from "vue";
+import Videos from "../components/Videos.vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
+  components: {
+    Videos,
+  },
   setup() {
-    const init = async () => {
-      const url = `${location.pathname}${location.search}`;
+    const store = useStore();
 
-      const res = await instance.get(url);
-      console.log(res);
-    };
+    // const init = async () => {
+    //   const url = `${location.pathname}${location.search}`;
 
-    init();
+    //   const res = await instance.get(url);
+    //   console.log(res.data.videos);
+
+    //   store.state.videos = res.data.videos;
+    // };
+
+    // init();
+
+    const url = `${location.pathname}${location.search}`;
+
+    store.dispatch("fetchVideos", { url });
   },
 });
 </script>

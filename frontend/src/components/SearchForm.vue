@@ -19,7 +19,11 @@ export default defineComponent({
       const keywordNode: HTMLInputElement =
         document.querySelector("[name=keyword]");
 
-      const keyword = keywordNode.value;
+      let keyword = keywordNode.value;
+
+      keyword = keyword.trim();
+
+      keywordNode.value = keyword;
 
       // https://velog.io/@skyepodium/vue-router로-데이터-전달하기-eskrsmr3
       router.push({ path: `/search`, query: { keyword } });
