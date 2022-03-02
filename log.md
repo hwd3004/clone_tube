@@ -10,6 +10,10 @@ https://archijude.tistory.com/385 - vue 404 에러 핸들링
 
 ---
 
+https://joshua1988.github.io/vue-camp/vuex/concept.html#뷰엑스-설치
+
+---
+
 https://typescript-kr.github.io/pages/variable-declarations.html
 
 타입스크립트 구조 분해 할당 후 타입 지정

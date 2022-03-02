@@ -1,6 +1,9 @@
 <template>
   <div>
     <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" /> -->
+
+    <p>{{ $store.state.asd }}</p>
+
     <div v-for="(videos, index) in state.videos" v-bind:key="index">
       <div>
         <p>{{ videos._id }}</p>
@@ -68,6 +71,9 @@ export default defineComponent({
     fetch.init();
 
     return { state, add, minus };
+  },
+  mounted() {
+    console.log(this.state);
   },
 });
 </script>
