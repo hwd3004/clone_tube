@@ -5,6 +5,8 @@ import Watch from "../views/videos/Watch.vue";
 import Edit from "../views/videos/Edit.vue";
 import PageNotFound from "../components/PageNotFound.vue";
 import Search from "../views/Search.vue";
+import Join from "../views/Join.vue";
+import Login from "../views/Login.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -33,6 +35,14 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/search",
     component: Search,
+  },
+  {
+    path: "/join",
+    component: Join,
+  },
+  {
+    path: "/login",
+    component: Login,
   },
   {
     path: "/:pathMatch(.*)",
