@@ -4,6 +4,7 @@ import Upload from "../views/videos/Upload.vue";
 import Watch from "../views/videos/Watch.vue";
 import Edit from "../views/videos/Edit.vue";
 import PageNotFound from "../components/PageNotFound.vue";
+import Search from "../views/Search.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -28,6 +29,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/videos/:id/edit",
     component: Edit,
+  },
+  {
+    path: "/search",
+    component: Search,
   },
   {
     path: "/:pathMatch(.*)",

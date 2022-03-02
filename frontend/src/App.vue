@@ -4,9 +4,23 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
+
+    <SearchForm />
+
     <router-view />
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import SearchForm from "./components/SearchForm.vue";
+
+export default defineComponent({
+  components: {
+    SearchForm,
+  },
+});
+</script>
 
 <style>
 #app {
