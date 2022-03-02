@@ -10,15 +10,15 @@
         v-model="form.title"
       />
       <br />
-      <input
+      <!-- <input
         type="text"
         name="description"
         placeholder="description"
         required
         minlength="20"
         v-model="form.description"
-      />
-      <br />
+      /> -->
+      <!-- <br /> -->
       <input
         type="text"
         name="hashtags"
@@ -26,6 +26,8 @@
         required
         v-model="form.hashtags"
       />
+      <br />
+      <QuillEditor theme="snow" toolbar="full" v-model="form.description" />
       <br />
       <input type="submit" value="upload" />
     </form>
@@ -35,6 +37,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from "@vue/runtime-core";
 import { instance } from "../../main";
+import { QuillEditor } from "@vueup/vue-quill";
 
 export default defineComponent({
   setup(props, context) {
@@ -48,8 +51,7 @@ export default defineComponent({
     return {
       form: {
         title: "dummy title",
-        description:
-          "dummy description dummy description dummy description dummy description",
+        description: "",
         hashtags: "dummy hashtags",
       },
     };
@@ -57,6 +59,10 @@ export default defineComponent({
   methods: {
     handleSubmit(e: Event) {
       console.log(this.form);
+
+      const editor = document.querySelector(".ql-editor");
+
+      this.form.description = editor.innerHTML;
 
       const post = async () => {
         const res = await instance.post("/videos/upload", this.form);

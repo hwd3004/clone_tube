@@ -170,3 +170,7 @@ export const search = async (req: Request, res: Response) => {
   return res.send({ pageTitle: "Search", videos });
 };
 ```
+
+---
+
+npm install @vueup/vue-quill@beta
