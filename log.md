@@ -1,4 +1,4 @@
-https://nomadcoders.co/wetube/lectures/2676
+https://nomadcoders.co/wetube/lectures/2703
 
 https://solbel.tistory.com/886 - [vue.js] axios 사용시 폼 데이터 전송하기 (+파일 업로드) [펌]
 
