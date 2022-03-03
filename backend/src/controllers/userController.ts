@@ -65,7 +65,6 @@ export const postLogin = async (req: Request, res: Response) => {
 };
 
 export const getSession = async (req: Request, res: Response) => {
-  console.log(req.sessionID);
   res.send({ asd: "asd" });
 };
 

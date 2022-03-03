@@ -39,12 +39,12 @@ export default defineComponent({
       return data["user/getUser"];
     });
 
-    const init = async () => {
-      const res = await instance.get("/get_session");
-      console.log("App.vue init", res);
-    };
+    // const init = async () => {
+    //   const res = await instance.get("/get_session");
+    //   console.log("App.vue init", res);
+    // };
 
-    init();
+    // init();
 
     return { user };
   },

@@ -5,6 +5,7 @@ import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import cors from "cors";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import "./db";
 import "./models/Videos";
 import "./models/Users";
@@ -22,8 +23,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     secret: "secret",
-    resave: true, // 변경사항이 없어도 저장. request하는 동안 세션이 수정되지 않은 경우에도 세션이 세션 저장소에 다시 저장되도록 합니다.
-    saveUninitialized: true, // 세션 초기화 전에도 저장. "초기화되지 않은" 세션을 저장소에 강제로 저장합니다.
+    resave: false, // 변경사항이 없어도 저장. request하는 동안 세션이 수정되지 않은 경우에도 세션이 세션 저장소에 다시 저장되도록 합니다.
+    saveUninitialized: false, // 세션 초기화 전에도 저장. "초기화되지 않은" 세션을 저장소에 강제로 저장합니다.
+    cookie: {
+      // maxAge: 2000,
+    },
+    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/clone_tube" }),
   })
 );
 
@@ -35,16 +40,17 @@ declare module "express-session" {
   }
 }
 
-// app.use((req, res, next) => {
-//   // console.log(req.session);
+app.use((req, res, next) => {
+  console.log("res.locals : ", res.locals);
 
-//   // // 브라우저가 request할 때 같이 보내는 session id
-//   // console.log(req.sessionID);
+  // 브라우저가 request할 때 같이 보내는 session id
 
-//   // console.log(req.body);
+  res.locals.loggedIn = req.session.loggedIn;
+  res.locals.user = req.session.user;
+  res.locals.siteName = "clone_tube";
 
-//   next();
-// });
+  next();
+});
 
 app.use("/", rootRouter);
 app.use("/users", userRouter);
