@@ -27,16 +27,24 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  console.log(req.session);
+// https://stackoverflow.com/questions/38900537/typescript-extend-express-session-interface-with-own-class
+declare module "express-session" {
+  interface SessionData {
+    user: object;
+    loggedIn: boolean;
+  }
+}
 
-  // 브라우저가 request할 때 같이 보내는 session id
-  console.log(req.sessionID);
+// app.use((req, res, next) => {
+//   // console.log(req.session);
 
-  console.log(req);
-  //   console.log(req.sessionStore);
-  next();
-});
+//   // // 브라우저가 request할 때 같이 보내는 session id
+//   // console.log(req.sessionID);
+
+//   // console.log(req.body);
+
+//   next();
+// });
 
 app.use("/", rootRouter);
 app.use("/users", userRouter);

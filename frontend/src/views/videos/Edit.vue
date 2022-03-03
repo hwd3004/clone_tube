@@ -40,50 +40,38 @@ import { defineComponent, reactive } from "@vue/runtime-core";
 import { instance } from "../../main";
 
 export default defineComponent({
-  setup(props, context) {
-    const state = reactive({
-      data: null,
+  setup() {
+    const form = reactive({
+      title: "",
+      description: "",
+      hashtags: "",
     });
 
-    return { state };
-  },
-  data() {
-    return {
-      form: {
-        title: "",
-        description: "",
-        hashtags: "",
-      },
-    };
-  },
-  mounted() {
-    const fetch = {
-      init: async () => {
-        const res = await instance.get(location.pathname);
+    const init = async () => {
+      const res = await instance.get(location.pathname);
 
-        const {
-          title,
-          description,
-          hashtags,
-        }: { title: string; description: string; hashtags: [] } =
-          res.data.video;
+      const {
+        title,
+        description,
+        hashtags,
+      }: { title: string; description: string; hashtags: [] } = res.data.video;
 
-        this.form.title = title;
-        this.form.description = description;
-        this.form.hashtags = hashtags.join();
-      },
+      form.title = title;
+      form.description = description;
+      form.hashtags = hashtags.join();
     };
-    fetch.init();
-  },
-  methods: {
-    handleSubmit(e: Event) {
-      console.log(this.form);
+
+    init();
+
+    const handleSubmit = (e: Event) => {
       const post = async () => {
-        const res = await instance.post(location.pathname, this.form);
+        const res = await instance.post(location.pathname, form);
         console.log(res);
       };
       post();
-    },
+    };
+
+    return { form, handleSubmit };
   },
 });
 </script>

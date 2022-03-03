@@ -37,7 +37,6 @@
 <script lang="ts">
 import { defineComponent, reactive } from "@vue/runtime-core";
 import { instance } from "../../main";
-import { QuillEditor } from "@vueup/vue-quill";
 
 export default defineComponent({
   setup(props, context) {

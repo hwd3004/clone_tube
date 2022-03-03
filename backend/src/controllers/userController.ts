@@ -10,46 +10,43 @@ export const postJoin = async (req: Request, res: Response) => {
   try {
     const { name, email, username, password, password2, location } = req.body;
 
-    await User.findOneAndRemove({ name: "test" });
-
-    if (password == password2) {
-      await User.create({
-        name,
-        username,
-        email,
-        password: await bcrypt.hash(password, 5),
-        location,
-      });
-      // {
-      //   email: 'test@test.com',
-      //   username: 'test_user',
-      //   password: '$2b$05$e9jcQKvVdA.Tcj4DdaXS6OtQnZS50h35QlOYrLTJBobCiyav8958.',
-      //   name: 'test',
-      //   location: 'test',
-      //   _id: new ObjectId("621f17f41daca48ccbe5b02d"),
-      //   __v: 0
-      // }
-
-      return res.send({ status: 200 });
-    } else {
-      return res.send({ status: 500, errorMsg: "Password confirmation does not match." });
+    if (password != password2) {
+      return res.send({ status: 400, errorMsg: "Password confirmation does not match." });
     }
+
+    const exists = await User.exists({ $or: [{ username, email }] });
+
+    if (exists) {
+      return res.send({ status: 400, errorMsg: "This username/email is already taken." });
+    }
+
+    await User.create({
+      name,
+      username,
+      email,
+      password: await bcrypt.hash(password, 5),
+      location,
+    });
+
+    return res.send({ status: 200 });
   } catch (error) {
     console.log(error);
-    return res.send({ status: 500, errorMsg: "This username/email is already taken." });
+    return res.send({ status: 400, errorMsg: "error" });
   }
 };
 
 export const edit = (req: Request, res: Response) => res.send("Edit User");
 export const remove = (req: Request, res: Response) => res.send("Remove User");
-export const getLogin = (req: Request, res: Response) => res.send("Login");
+
+export const getLogin = async (req: Request, res: Response) => {
+  res.send("Login");
+};
+
 export const postLogin = async (req: Request, res: Response) => {
   // console.log(req.body);
   const { username, password } = req.body;
 
   const user = await User.findOne({ username });
-
-  // console.log("user : ", user);
 
   if (!user) {
     return res.send({ status: 400, errorMsg: "An account with this username does not exists." });
@@ -61,7 +58,16 @@ export const postLogin = async (req: Request, res: Response) => {
     return res.send({ status: 400, errorMsg: "Wrong password" });
   }
 
-  return res.send({ status: 200 });
+  req.session.user = user;
+  req.session.loggedIn = true;
+
+  return res.send({ status: 200, loggedIn: req.session.loggedIn, user: req.session.user });
 };
+
+export const getSession = async (req: Request, res: Response) => {
+  console.log(req.sessionID);
+  res.send({ asd: "asd" });
+};
+
 export const logout = (req: Request, res: Response) => res.send("Log out");
 export const see = (req: Request, res: Response) => res.send("See User");

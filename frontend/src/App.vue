@@ -2,9 +2,13 @@
   <div>
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <!-- <router-link to="/about">About</router-link> | -->
-      <router-link to="/join">Join</router-link> |
-      <router-link to="/login">Log In</router-link>
+      <span v-if="user.loggedIn == false">
+        <router-link to="/join">Join</router-link> |
+        <router-link to="/login">Log In</router-link>
+      </span>
+      <span v-else>
+        <router-link to="/logout">Log Out</router-link>
+      </span>
     </div>
 
     <SearchForm />
@@ -16,12 +20,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
+import { useStore } from "vuex";
 import SearchForm from "./components/SearchForm.vue";
+import { instance } from "./main";
 
 export default defineComponent({
   components: {
     SearchForm,
+  },
+  setup() {
+    const store = useStore();
+
+    const user = computed(() => {
+      const data = store.getters;
+      // console.log(data);
+      console.log(data["user/getUser"]);
+      return data["user/getUser"];
+    });
+
+    const init = async () => {
+      const res = await instance.get("/get_session");
+      console.log("App.vue init", res);
+    };
+
+    init();
+
+    return { user };
   },
 });
 </script>

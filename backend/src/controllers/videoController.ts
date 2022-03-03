@@ -23,7 +23,7 @@ export const watch = async (req: Request, res: Response) => {
     } = req;
 
     const video = await Video.findById(id);
-    console.log(video);
+    // console.log(video);
 
     return res.send({
       status: 200,
@@ -109,7 +109,7 @@ export const postEdit = async (req: Request, res: Response) => {
 
     return res.sendStatus(200);
   } catch (error) {
-    return res.send({ status: 500, errorMsg: "Internal Server Error" });
+    return res.send({ status: 400, errorMsg: "Error" });
   }
 };
 
@@ -149,7 +149,7 @@ export const deleteVideo = async (req: Request, res: Response) => {
     return res.send({ status: 200 });
   } catch (error) {
     console.log(error);
-    return res.send({ status: 500, errorMsg: "Cannot Delete Video." });
+    return res.send({ status: 400, errorMsg: "Cannot Delete Video." });
   }
 };
 

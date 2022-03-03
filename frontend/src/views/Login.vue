@@ -2,12 +2,7 @@
   <div>
     <h1>login</h1>
     <form v-on:submit.prevent="handleSubmit">
-      <input
-        v-model="form.username"
-        type="text"
-        name="username"
-        placeholder="username"
-      />
+      <input v-model="form.username" type="text" name="username" />
       <br />
       <input
         v-model="form.password"
@@ -22,25 +17,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { instance } from "../main";
+import { defineComponent, reactive, watchEffect } from "vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
-  data() {
-    return {
-      form: {
-        username: "test_user",
-        password: "test",
-      },
-    };
-  },
-  methods: {
-    handleSubmit: async function () {
-      console.log();
+  setup() {
+    const form = reactive({ username: "test_user", password: "test" });
 
-      const res = await instance.post(location.pathname, this.form);
-      console.log(res);
-    },
+    const store = useStore();
+
+    const handleSubmit = async () => {
+      store.dispatch("user/login", form);
+    };
+
+    // watchEffect(() => {
+    //   console.log(form.username);
+    //   console.log(form.password);
+    // });
+    return { form, handleSubmit };
   },
 });
 </script>
