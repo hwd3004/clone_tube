@@ -41,13 +41,14 @@ declare module "express-session" {
 }
 
 app.use((req, res, next) => {
-  console.log("res.locals : ", res.locals);
+  // console.log("res.locals : ", res.locals);
+  console.log(req.sessionID)
 
   // 브라우저가 request할 때 같이 보내는 session id
 
-  res.locals.loggedIn = req.session.loggedIn;
-  res.locals.user = req.session.user;
-  res.locals.siteName = "clone_tube";
+  // res.locals.loggedIn = req.session.loggedIn;
+  // res.locals.user = req.session.user;
+  // res.locals.siteName = "clone_tube";
 
   next();
 });
