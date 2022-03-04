@@ -1,15 +1,13 @@
 <template>
   <div>
-    <div v-for="(videos, index) in getVideos" v-bind:key="index">
+    <div v-for="(videos, index) in videos" v-bind:key="index">
       <div>
-        <p>{{ videos._id }}</p>
         <p>
           <!-- https://goddino.tistory.com/117 - vue 동적 라우팅 -->
           <router-link v-bind:to="`/videos/${videos._id}`">{{
             videos.title
           }}</router-link>
         </p>
-        <p>{{ videos.description }}</p>
         <p>{{ videos.hashtags }}</p>
         <hr />
       </div>
@@ -20,14 +18,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { mapGetters } from "vuex";
+import { computed, defineComponent } from "vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
-  // computed: mapGetters({
-  //   getVideos: "getVideos",
-  // }),
-  computed: { ...mapGetters(["getVideos"]) },
+  setup() {
+    const store = useStore();
+
+    const videos = computed(() => {
+      const data = store.getters["getVideos"];
+      return data;
+    });
+
+    return { videos };
+  },
 });
 </script>
 

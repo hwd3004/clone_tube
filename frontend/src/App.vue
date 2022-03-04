@@ -2,7 +2,7 @@
   <div>
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <span v-if="user.loggedIn == false">
+      <span v-if="!user.loggedIn">
         <router-link to="/join">Join</router-link> |
         <router-link to="/login">Log In</router-link>
       </span>
@@ -33,18 +33,9 @@ export default defineComponent({
     const store = useStore();
 
     const user = computed(() => {
-      const data = store.getters;
-      // console.log(data);
-      console.log(data["user/getUser"]);
-      return data["user/getUser"];
+      const data = store.getters["user/getUser"];
+      return data;
     });
-
-    // const init = async () => {
-    //   const res = await instance.get("/get_session");
-    //   console.log("App.vue init", res);
-    // };
-
-    // init();
 
     return { user };
   },

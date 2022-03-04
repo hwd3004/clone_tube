@@ -64,9 +64,5 @@ export const postLogin = async (req: Request, res: Response) => {
   return res.send({ status: 200, loggedIn: req.session.loggedIn, user: req.session.user });
 };
 
-export const getSession = async (req: Request, res: Response) => {
-  res.send({ asd: "asd" });
-};
-
 export const logout = (req: Request, res: Response) => res.send("Log out");
 export const see = (req: Request, res: Response) => res.send("See User");

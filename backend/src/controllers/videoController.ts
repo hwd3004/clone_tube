@@ -169,11 +169,12 @@ export const postUpload = async (req: Request, res: Response) => {
       },
     });
 
-    return res.sendStatus(200);
+    return res.send({ status: 200 });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.send({
-      errorMsg: error,
+      status: 400,
+      errorMsg: "Cannot Upload Video.",
     });
   }
 };

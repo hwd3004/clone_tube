@@ -10,15 +10,6 @@
         v-model="form.title"
       />
       <br />
-      <!-- <input
-        type="text"
-        name="description"
-        placeholder="description"
-        required
-        minlength="20"
-        v-model="form.description"
-      /> -->
-      <!-- <br /> -->
       <input
         type="text"
         name="hashtags"
@@ -27,7 +18,14 @@
         v-model="form.hashtags"
       />
       <br />
-      <QuillEditor theme="snow" toolbar="full" v-model="form.description" />
+
+      <!-- https://stackoverflow.com/questions/67806814/how-to-use-v-model-in-quill-editor -->
+      <QuillEditor
+        theme="snow"
+        toolbar="full"
+        v-model:content="form.description"
+        contentType="html"
+      />
       <br />
       <input type="submit" value="upload" />
     </form>
@@ -35,41 +33,47 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "@vue/runtime-core";
+import {
+  defineComponent,
+  onMounted,
+  onUpdated,
+  reactive,
+  watchEffect,
+} from "@vue/runtime-core";
+import { useRouter } from "vue-router";
 import { instance } from "../../main";
 
 export default defineComponent({
-  setup(props, context) {
-    const state = reactive({
-      data: null,
+  setup() {
+    const form = reactive({
+      title: "dummy title",
+      description:
+        "<p>dummy description</p><p>dummy description</p><p>dummy description</p>",
+      hashtags: "dummy hashtags",
     });
 
-    return { state };
-  },
-  data() {
-    return {
-      form: {
-        title: "dummy title",
-        description: "",
-        hashtags: "dummy hashtags",
-      },
+    const router = useRouter();
+
+    const handleSubmit = async (e: Event) => {
+      const {
+        data: { status, errorMsg },
+      }: { data: { status: number; errorMsg: string } } = await instance.post(
+        "/videos/upload",
+        form
+      );
+
+      if (status == 200) {
+        router.push("/");
+      } else {
+        alert(errorMsg);
+      }
     };
-  },
-  methods: {
-    handleSubmit(e: Event) {
-      console.log(this.form);
 
-      const editor = document.querySelector(".ql-editor");
+    // watchEffect(() => {
+    //   console.log(form.description);
+    // });
 
-      this.form.description = editor.innerHTML;
-
-      const post = async () => {
-        const res = await instance.post("/videos/upload", this.form);
-        console.log(res);
-      };
-
-      post();
-    },
+    return { form, handleSubmit };
   },
 });
 </script>

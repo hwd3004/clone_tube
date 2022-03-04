@@ -45,12 +45,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { instance } from "../main";
 
 export default defineComponent({
-  data() {
-    return {
+  setup() {
+    const form = reactive({
       form: {
         name: "test",
         email: "test@test.com",
@@ -59,20 +59,22 @@ export default defineComponent({
         password2: "test",
         location: "test",
       },
-      errorMsg: null,
-    };
-  },
-  methods: {
-    handleSubmit: async function () {
-      const res = await instance.post(window.location.pathname, this.form);
+    });
+
+    let errorMsg = ref(null);
+
+    const handleSubmit = async () => {
+      const res = await instance.post(window.location.pathname, form);
       console.log(res);
 
       if (res.data.status == 200) {
         alert("가입완료");
       } else {
-        this.errorMsg = res.data.errorMsg;
+        errorMsg = res.data.errorMsg;
       }
-    },
+    };
+
+    return { form, errorMsg, handleSubmit };
   },
 });
 </script>

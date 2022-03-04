@@ -1,86 +1,61 @@
 <template>
-  <div v-if="state.status == 200">
-    <p>{{ state.video.title }}</p>
-    <p>{{ state.video.description }}</p>
-    <p>{{ state.video.hashtags }}</p>
-    <p>{{ state.video.meta }}</p>
-    <p>{{ state.video.createdAt }}</p>
+  <div>
+    <div v-if="video">
+      <p>{{ video.title }}</p>
+      <p v-html="video.description"></p>
+      <p>{{ video.hashtags }}</p>
+      <p>{{ video.meta }}</p>
+      <p>{{ video.createdAt }}</p>
 
-    <router-link v-bind:to="`/videos/${state.video._id}/edit`"
-      ><button>Edit</button></router-link
-    >
-    &nbsp;
-    <button @click="fetch.delete">Delete</button>
-  </div>
-  <div v-else>
-    <PageNotFound />
+      <router-link v-bind:to="`/videos/${video._id}/edit`"
+        ><button>Edit</button></router-link
+      >
+
+      &nbsp;
+      <button @click="deleteVideo">Delete</button>
+    </div>
+    <div v-else>
+      <PageNotFound />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "@vue/runtime-core";
-import { instance } from "../../main";
+import { computed, defineComponent } from "@vue/runtime-core";
 import PageNotFound from "../../components/PageNotFound.vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default defineComponent({
   components: {
     PageNotFound,
   },
-  setup(props, context) {
-    const state = reactive({
-      video: {
-        type: Object,
-        _id: 0,
-        hashtags: "",
-      },
-      status: 200,
-    });
-
+  setup() {
     const router = useRouter();
 
-    const fetch = {
-      init: async () => {
-        try {
-          const res = await instance.get(location.pathname);
+    const store = useStore();
 
-          const {
-            data: { status },
-          } = res;
+    const url = location.pathname;
 
-          state.status = status;
+    store.dispatch("fetchVideo", { url });
 
-          state.video = res.data.video;
+    const video = computed(() => {
+      const data = store.getters["getVideo"];
 
-          const { hashtags }: { hashtags: [] } = res.data.video;
+      return data;
+    });
 
-          state.video.hashtags = hashtags.join();
+    const deleteVideo = async () => {
+      const { status, errorMsg } = await store.dispatch("deleteVideo", { url });
 
-          // const title = document.querySelector("title");
-          // title.text = `${res.data.pageTitle} | frontend`;
-        } catch (error) {
-          console.log(error);
-        }
-      },
-      delete: async () => {
-        try {
-          // https://youtu.be/hY7F7U8qDPA?t=215 - Building a Web app with Vue Router, Typescript and Vue Composition API
-          // https://sunny921.github.io/posts/vuejs-router-03/
-          const res = await instance.get(`/videos/${state.video._id}/delete`);
-          if (res.data.status == 200) {
-            router.push({ path: "/" });
-          } else {
-            console.log(res.data);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      },
+      if (status == 200) {
+        router.push("/");
+      } else {
+        alert(errorMsg);
+      }
     };
 
-    fetch.init();
-
-    return { state, fetch };
+    return { video, deleteVideo };
   },
 });
 </script>

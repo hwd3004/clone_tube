@@ -1,4 +1,19 @@
 import { instance } from "../../main";
+
+const getLsUser = () => {
+  return JSON.parse(localStorage.getItem("user"));
+};
+const getLsLoggedIn = () => {
+  return Boolean(localStorage.getItem("loggedIn"));
+};
+
+const setLsUser = (user: unknown) => {
+  localStorage.setItem("user", JSON.stringify(user));
+};
+const setLsLoggedIn = (loggedIn: boolean) => {
+  localStorage.setItem("loggedIn", String(loggedIn));
+};
+
 const user = {
   namespaced: true,
   state: {
@@ -8,14 +23,18 @@ const user = {
   getters: {
     getUser: (state: any) => {
       return {
-        user: state.user,
-        loggedIn: state.loggedIn,
+        user: state.user || getLsUser,
+        loggedIn: state.loggedIn || getLsLoggedIn,
       };
     },
   },
   mutations: {
     setUser: function (state: any, payload: any) {
       const { user, loggedIn } = payload;
+
+      setLsUser(user);
+      setLsLoggedIn(loggedIn);
+
       state.user = user;
       state.loggedIn = loggedIn;
     },
@@ -23,11 +42,7 @@ const user = {
   actions: {
     login: async function (context: any, payload: any) {
       try {
-        // console.log('user actions login')
-        // console.log(payload);
-
         const res = await instance.post("/login", payload);
-        // console.log(res);
 
         const { loggedIn, user } = res.data;
 

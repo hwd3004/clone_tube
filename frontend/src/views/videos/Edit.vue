@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Video Edit</h1>
+    <!-- {{ video }} -->
     <form id="form" v-on:submit.prevent="handleSubmit">
       <input
         type="text"
@@ -13,19 +14,18 @@
       <br />
       <input
         type="text"
-        name="description"
-        placeholder="description"
-        required
-        minlength="20"
-        v-model="form.description"
-      />
-      <br />
-      <input
-        type="text"
         name="hashtags"
         placeholder="hashtags, separated by comma"
         required
         v-model="form.hashtags"
+      />
+      <br />
+      <!-- https://stackoverflow.com/questions/67806814/how-to-use-v-model-in-quill-editor -->
+      <QuillEditor
+        theme="snow"
+        toolbar="full"
+        v-model:content="form.description"
+        contentType="html"
       />
       <br />
       <input type="submit" value="upload" />
@@ -36,7 +36,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "@vue/runtime-core";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  reactive,
+  watchEffect,
+} from "@vue/runtime-core";
+import { useStore } from "vuex";
 import { instance } from "../../main";
 
 export default defineComponent({
@@ -47,31 +54,32 @@ export default defineComponent({
       hashtags: "",
     });
 
-    const init = async () => {
-      const res = await instance.get(location.pathname);
+    const store = useStore();
 
-      const {
-        title,
-        description,
-        hashtags,
-      }: { title: string; description: string; hashtags: [] } = res.data.video;
+    const url = location.pathname;
 
-      form.title = title;
-      form.description = description;
-      form.hashtags = hashtags.join();
+    store.dispatch("fetchVideo", { url });
+
+    const video = computed(() => {
+      const data = store.getters["getVideo"];
+      return data;
+    });
+
+    onMounted(() => {
+      form.title = video.value.title;
+      form.description = video.value.description;
+      form.hashtags = video.value.hashtags;
+    });
+
+    const handleSubmit = async (e: Event) => {
+      await instance.post(location.pathname, form);
     };
 
-    init();
+    watchEffect(() => {
+      // console.log(video);
+    });
 
-    const handleSubmit = (e: Event) => {
-      const post = async () => {
-        const res = await instance.post(location.pathname, form);
-        console.log(res);
-      };
-      post();
-    };
-
-    return { form, handleSubmit };
+    return { form, handleSubmit, video };
   },
 });
 </script>
