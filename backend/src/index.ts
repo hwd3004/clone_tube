@@ -41,8 +41,7 @@ declare module "express-session" {
 }
 
 app.use((req, res, next) => {
-  // console.log("res.locals : ", res.locals);
-  console.log(req.sessionID)
+  // console.log(req.sessionID)
 
   // 브라우저가 request할 때 같이 보내는 session id
 

@@ -1,14 +1,6 @@
 import { Request, Response } from "express";
 import Video from "../models/Videos";
 
-// export const home = (req: Request, res: Response) => {
-//   Video.find({}, (error, result) => {
-//     console.log("error : ", error);
-//     console.log("result : ", result);
-//   });
-//   return res.send({ pageTitle: "home" });
-// };
-
 export const home = async (req: Request, res: Response) => {
   // https://mongoosejs.com/docs/api.html#query_Query-sort
   const videos = await Video.find({}).sort({ createdAt: "desc" });
@@ -62,7 +54,6 @@ export const getEdit = async (req: Request, res: Response) => {
 
 export const postEdit = async (req: Request, res: Response) => {
   try {
-    // console.log("postEdit");
     const {
       params: { id },
     } = req;
@@ -107,7 +98,7 @@ export const postEdit = async (req: Request, res: Response) => {
       }),
     });
 
-    return res.sendStatus(200);
+    return res.send({ status: 200 });
   } catch (error) {
     return res.send({ status: 400, errorMsg: "Error" });
   }

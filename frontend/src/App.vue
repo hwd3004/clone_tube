@@ -7,7 +7,7 @@
         <router-link to="/login">Log In</router-link>
       </span>
       <span v-else>
-        <router-link to="/logout">Log Out</router-link>
+        <span id="logout" @click="logout">Log Out</span>
       </span>
     </div>
 
@@ -37,7 +37,12 @@ export default defineComponent({
       return data;
     });
 
-    return { user };
+    const logout = async () => {
+      const res = await instance.get("/users/logout");
+      console.log(res);
+    };
+
+    return { user, logout };
   },
 });
 </script>
@@ -55,9 +60,14 @@ export default defineComponent({
   padding: 30px;
 }
 
-#nav a {
+#nav a,
+#logout {
   font-weight: bold;
   color: #2c3e50;
+}
+
+#logout {
+  cursor: pointer;
 }
 
 #nav a.router-link-exact-active {

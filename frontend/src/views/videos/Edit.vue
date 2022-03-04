@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1>Video Edit</h1>
-    <!-- {{ video }} -->
     <form id="form" v-on:submit.prevent="handleSubmit">
       <input
         type="text"
@@ -43,6 +42,7 @@ import {
   reactive,
   watchEffect,
 } from "@vue/runtime-core";
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { instance } from "../../main";
 
@@ -53,6 +53,8 @@ export default defineComponent({
       description: "",
       hashtags: "",
     });
+
+    const router = useRouter();
 
     const store = useStore();
 
@@ -67,19 +69,34 @@ export default defineComponent({
 
     onMounted(() => {
       form.title = video.value.title;
-      form.description = video.value.description;
+
       form.hashtags = video.value.hashtags;
+
+      const temp: HTMLDivElement = document.querySelector(".ql-editor");
+      temp.innerHTML = video.value.description || null;
+      // form.description = video.value.description;
     });
 
     const handleSubmit = async (e: Event) => {
-      await instance.post(location.pathname, form);
+      const res = await instance.post(location.pathname, form);
+      const {
+        data: { status, errorMsg },
+      } = res;
+
+      if (status == 200) {
+        router.push("/");
+      } else {
+        alert(errorMsg);
+      }
     };
 
-    watchEffect(() => {
-      // console.log(video);
-    });
+    // watchEffect(() => {
+    //   console.log(form.title);
+    //   console.log(form.description);
+    //   console.log(form.hashtags);
+    // });
 
-    return { form, handleSubmit, video };
+    return { form, handleSubmit };
   },
 });
 </script>

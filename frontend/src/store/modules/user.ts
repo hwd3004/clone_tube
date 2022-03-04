@@ -1,10 +1,10 @@
 import { instance } from "../../main";
 
-const getLsUser = () => {
+export const getLsUser = () => {
   return JSON.parse(localStorage.getItem("user"));
 };
-const getLsLoggedIn = () => {
-  return Boolean(localStorage.getItem("loggedIn"));
+export const getLsLoggedIn = () => {
+  return JSON.parse(localStorage.getItem("loggedIn"));
 };
 
 const setLsUser = (user: unknown) => {

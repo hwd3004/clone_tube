@@ -64,5 +64,29 @@ export const postLogin = async (req: Request, res: Response) => {
   return res.send({ status: 200, loggedIn: req.session.loggedIn, user: req.session.user });
 };
 
-export const logout = (req: Request, res: Response) => res.send("Log out");
+export const logout = async (req: Request, res: Response) => {
+  try {
+    let user: any = req.headers.user;
+    // user = JSON.parse(user);
+
+    let loggedin: any = req.headers.loggedin;
+    loggedin = JSON.parse(loggedin);
+
+    console.log(user);
+    console.log(loggedin);
+
+    console.log(req.session);
+
+    
+
+
+    res.send({ status: 200 });
+  } catch (error) {
+    console.error(error);
+    res.send({
+      status: 400,
+      errorMsg: "error",
+    });
+  }
+};
 export const see = (req: Request, res: Response) => res.send("See User");
