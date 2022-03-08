@@ -16,6 +16,17 @@ const PORT = 4000;
 
 const app = express();
 
+// 세션 데이터는 쿠키 자체에 저장되지 않고 세션 ID에만 저장됩니다. 세션 데이터는 서버 측에 저장됩니다.
+// app.use(
+//   session({
+//     secret: "secret",
+//     resave: false, // 재저장을 계속 할 것인지 정보, 세션에 변화가 없어도 계속 저장한다는 옵션이다.(false 권장)
+//     saveUninitialized: false, // True일 경우 세션 저장 전 unitialized 상태로 미리 저장한다
+//     cookie: { maxAge: 3.6e6 * 24 }, // 24시간 뒤 만료(자동 삭제)
+//     store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/clone_tube" }),
+//   })
+// );
+
 app.use(morgan("dev"));
 
 app.use(
@@ -30,20 +41,6 @@ app.use(fileUpload());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(compression());
-
-
-// 세션 데이터는 쿠키 자체에 저장되지 않고 세션 ID에만 저장됩니다. 세션 데이터는 서버 측에 저장됩니다.
-app.use(
-  session({
-    secret: "secret",
-    resave: false, // 변경사항이 없어도 저장. request하는 동안 세션이 수정되지 않은 경우에도 세션이 세션 저장소에 다시 저장되도록 합니다.
-    saveUninitialized: false, // 세션 초기화 전에도 저장. "초기화되지 않은" 세션을 저장소에 강제로 저장합니다.
-    cookie: {
-      // maxAge: 2000,
-    },
-    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/clone_tube" }),
-  })
-);
 
 // https://stackoverflow.com/questions/38900537/typescript-extend-express-session-interface-with-own-class
 declare module "express-session" {
@@ -61,6 +58,11 @@ declare module "express-session" {
 //   // res.locals.loggedIn = req.session.loggedIn;
 //   // res.locals.user = req.session.user;
 //   // res.locals.siteName = "clone_tube";
+
+//   console.log(req.session.user);
+//   console.log(req.session.loggedIn);
+//   console.log(req.session.cookie);
+//   console.log(req.sessionID);
 
 //   next();
 // });

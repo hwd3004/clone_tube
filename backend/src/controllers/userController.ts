@@ -61,10 +61,12 @@ export const postLogin = async (req: Request, res: Response) => {
     return res.send({ status: 400, errorMsg: "Wrong password" });
   }
 
-  req.session.user = user;
-  req.session.loggedIn = true;
+  // req.session.user = user;
+  // req.session.loggedIn = true;
 
-  return res.send({ status: 200, loggedIn: req.session.loggedIn, user: req.session.user });
+  // req.session.save();
+
+  return res.send({ status: 200, loggedIn: true, user });
 };
 
 export const logout = async (req: Request, res: Response) => {

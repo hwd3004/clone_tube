@@ -2,7 +2,7 @@
   <div>
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <span v-if="auth.loggedIn">
+      <span v-if="!auth.loggedIn">
         <router-link to="/join">Join</router-link> |
         <router-link to="/login">Log In</router-link>
       </span>
@@ -33,13 +33,13 @@ export default defineComponent({
     const store = useStore();
 
     const auth = computed(() => {
-      const data = store.getters["user/getUser"];
-      return data;
+      return store.getters["user/getUser"];
     });
 
     const logout = async () => {
-      const res = await instance.get("/users/logout");
-      console.log(res);
+      // const res = await instance.get("/users/logout");
+      // console.log(res);
+      await store.dispatch("user/logout");
     };
 
     return { auth, logout };

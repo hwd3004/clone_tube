@@ -1,10 +1,14 @@
 import { instance } from "../../main";
 
 export const getLsUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
+  const data = JSON.parse(localStorage.getItem("user"));
+  // console.log(data);
+  return data;
 };
 export const getLsLoggedIn = () => {
-  return JSON.parse(localStorage.getItem("loggedIn"));
+  const data = JSON.parse(localStorage.getItem("loggedIn"));
+  // console.log(data);
+  return data;
 };
 
 const setLsUser = (user: any) => {
@@ -17,15 +21,15 @@ const setLsLoggedIn = (loggedIn: boolean) => {
 const user = {
   namespaced: true,
   state: {
-    user: { type: Object },
-    loggedIn: false,
+    user: getLsUser(),
+    loggedIn: getLsLoggedIn(),
     errorMsg: false,
   },
   getters: {
     getUser: (state: any) => {
       return {
-        user: state.user || getLsUser,
-        loggedIn: state.loggedIn || getLsLoggedIn,
+        user: state.user,
+        loggedIn: state.loggedIn,
       };
     },
     getErrorMsg: (state: any) => {
@@ -36,9 +40,9 @@ const user = {
   },
   mutations: {
     setUser: function (state: any, payload: any) {
-      const { user, loggedIn, errorMsg } = payload;
+      const { user, loggedIn, errorMsg, status } = payload;
 
-      if (errorMsg) {
+      if (status != 200) {
         state.errorMsg = errorMsg;
       } else {
         setLsUser(user);
@@ -48,15 +52,31 @@ const user = {
         state.loggedIn = loggedIn;
       }
     },
+    setLogout: function (state: any, payload: any) {
+      localStorage.removeItem("user");
+      localStorage.removeItem("loggedIn");
+
+      state.user = {};
+      state.loggedIn = false;
+    },
   },
   actions: {
     login: async function (context: any, payload: any) {
       try {
         const res = await instance.post("/login", payload);
 
-        const { loggedIn, user, errorMsg } = res.data;
+        const { loggedIn, user, errorMsg, status } = res.data;
 
-        context.commit("setUser", { user, loggedIn, errorMsg });
+        context.commit("setUser", { user, loggedIn, errorMsg, status });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    logout: async function (context: any, payload: any) {
+      try {
+        // const res = await instance.post("/users/logout");
+
+        context.commit("setLogout");
       } catch (error) {
         console.error(error);
       }
