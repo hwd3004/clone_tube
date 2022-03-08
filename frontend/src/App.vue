@@ -2,7 +2,7 @@
   <div>
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <span v-if="!user.loggedIn">
+      <span v-if="auth.loggedIn">
         <router-link to="/join">Join</router-link> |
         <router-link to="/login">Log In</router-link>
       </span>
@@ -32,7 +32,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const user = computed(() => {
+    const auth = computed(() => {
       const data = store.getters["user/getUser"];
       return data;
     });
@@ -42,7 +42,7 @@ export default defineComponent({
       console.log(res);
     };
 
-    return { user, logout };
+    return { auth, logout };
   },
 });
 </script>

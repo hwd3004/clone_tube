@@ -10,6 +10,9 @@ export const postJoin = async (req: Request, res: Response) => {
   try {
     const { name, email, username, password, password2, location } = req.body;
 
+    console.log(req.body);
+    console.log(req.headers);
+
     if (password != password2) {
       return res.send({ status: 400, errorMsg: "Password confirmation does not match." });
     }
@@ -76,9 +79,6 @@ export const logout = async (req: Request, res: Response) => {
     console.log(loggedin);
 
     console.log(req.session);
-
-    
-
 
     res.send({ status: 200 });
   } catch (error) {

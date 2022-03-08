@@ -1,9 +1,7 @@
 <template>
   <div>
-    <br />
-    <hr />
     <h3>Join</h3>
-    <form id="form" v-on:submit.prevent="handleSubmit">
+    <form id="form" v-on:submit.prevent="handleSubmit" autocomplete="off" >
       <input v-model="form.name" type="text" name="name" placeholder="name" />
       <br />
       <input v-model="form.email" type="email" email placeholder="email" />
@@ -38,8 +36,8 @@
       <br />
       <input type="submit" />
     </form>
-    <p v-if="this.errorMsg">
-      {{ this.errorMsg }}
+    <p v-if="errorMsg">
+      {{ errorMsg }}
     </p>
   </div>
 </template>
@@ -51,26 +49,23 @@ import { instance } from "../main";
 export default defineComponent({
   setup() {
     const form = reactive({
-      form: {
-        name: "test",
-        email: "test@test.com",
-        username: "test_user",
-        password: "test",
-        password2: "test",
-        location: "test",
-      },
+      name: "test",
+      email: "test@test.com",
+      username: "test_user",
+      password: "test",
+      password2: "test",
+      location: "test",
     });
 
-    let errorMsg = ref(null);
+    const errorMsg = ref(null);
 
     const handleSubmit = async () => {
       const res = await instance.post(window.location.pathname, form);
-      console.log(res);
 
       if (res.data.status == 200) {
         alert("가입완료");
       } else {
-        errorMsg = res.data.errorMsg;
+        errorMsg.value = res.data.errorMsg;
       }
     };
 

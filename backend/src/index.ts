@@ -9,15 +9,28 @@ import MongoStore from "connect-mongo";
 import "./db";
 import "./models/Videos";
 import "./models/Users";
+import compression from "compression";
+import fileUpload from "express-fileupload";
 
 const PORT = 4000;
 
 const app = express();
 
 app.use(morgan("dev"));
-app.use(cors());
+
+app.use(
+  cors({
+    origin: ["http://localhost:8000"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
+app.use(fileUpload());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(compression());
+
 
 // 세션 데이터는 쿠키 자체에 저장되지 않고 세션 ID에만 저장됩니다. 세션 데이터는 서버 측에 저장됩니다.
 app.use(
@@ -40,17 +53,17 @@ declare module "express-session" {
   }
 }
 
-app.use((req, res, next) => {
-  // console.log(req.sessionID)
+// app.use((req, res, next) => {
+//   // console.log(req.sessionID)
 
-  // 브라우저가 request할 때 같이 보내는 session id
+//   // 브라우저가 request할 때 같이 보내는 session id
 
-  // res.locals.loggedIn = req.session.loggedIn;
-  // res.locals.user = req.session.user;
-  // res.locals.siteName = "clone_tube";
+//   // res.locals.loggedIn = req.session.loggedIn;
+//   // res.locals.user = req.session.user;
+//   // res.locals.siteName = "clone_tube";
 
-  next();
-});
+//   next();
+// });
 
 app.use("/", rootRouter);
 app.use("/users", userRouter);

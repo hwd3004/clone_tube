@@ -1,9 +1,10 @@
 <template>
   <div>
-    <form v-on:submit.prevent="handleSearch">
+    <form v-on:submit.prevent="handleSearch" autocomplete="off">
       <input type="text" placeholder="Search by title" v-model="keyword" />
       <input type="submit" value="search" />
     </form>
+    <hr />
   </div>
 </template>
 
