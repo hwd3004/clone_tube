@@ -1,4 +1,5 @@
 import { instance } from "../../main";
+import router from "../../router";
 
 export const getLsUser = () => {
   const data = JSON.parse(localStorage.getItem("user"));
@@ -50,6 +51,9 @@ const user = {
 
         state.user = user;
         state.loggedIn = loggedIn;
+
+        // https://youtu.be/eWDHkIdK4Sc?t=219
+        router.push("/");
       }
     },
     setLogout: function (state: any, payload: any) {
@@ -77,6 +81,8 @@ const user = {
         // const res = await instance.post("/users/logout");
 
         context.commit("setLogout");
+
+        router.push("/");
       } catch (error) {
         console.error(error);
       }
