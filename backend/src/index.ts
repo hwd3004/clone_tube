@@ -1,3 +1,4 @@
+require("dotenv").config();
 import express from "express";
 import morgan from "morgan";
 import rootRouter from "./routers/rootRouter";
@@ -12,7 +13,7 @@ import "./models/Users";
 import compression from "compression";
 import fileUpload from "express-fileupload";
 
-const PORT = 4000;
+const PORT = process.env.PORT;
 
 const app = express();
 

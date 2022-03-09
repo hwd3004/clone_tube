@@ -147,7 +147,7 @@ export const deleteVideo = async (req: Request, res: Response) => {
 export const getUpload = (req: Request, res: Response) => res.send("Upload");
 export const postUpload = async (req: Request, res: Response) => {
   try {
-    // console.log(req.body);
+    console.log(req.body);
 
     const { title, description, hashtags } = req.body;
     await Video.create({

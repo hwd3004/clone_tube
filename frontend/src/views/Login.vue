@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>login</h1>
-    <form v-on:submit.prevent="handleSubmit" autocomplete="off" >
+    <form v-on:submit.prevent="handleSubmit" autocomplete="off">
       <input v-model="form.username" type="text" name="username" />
       <br />
       <input
@@ -20,7 +20,13 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, watchEffect } from "vue";
+import {
+  computed,
+  defineComponent,
+  onUnmounted,
+  reactive,
+  watchEffect,
+} from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
@@ -39,10 +45,10 @@ export default defineComponent({
       return errorMsg;
     });
 
-    // watchEffect(() => {
-    //   console.log(form.username);
-    //   console.log(form.password);
-    // });
+    onUnmounted(() => {
+      store.commit("user/clearError");
+    });
+
     return { form, handleSubmit, errorMsg };
   },
 });

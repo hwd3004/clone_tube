@@ -33,15 +33,8 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  onMounted,
-  onUpdated,
-  reactive,
-  watchEffect,
-} from "@vue/runtime-core";
-import { useRouter } from "vue-router";
-import { instance } from "../../main";
+import { defineComponent, reactive } from "@vue/runtime-core";
+import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
@@ -52,26 +45,11 @@ export default defineComponent({
       hashtags: "dummy hashtags",
     });
 
-    const router = useRouter();
+    const store = useStore();
 
     const handleSubmit = async (e: Event) => {
-      const {
-        data: { status, errorMsg },
-      }: { data: { status: number; errorMsg: string } } = await instance.post(
-        "/videos/upload",
-        form
-      );
-
-      if (status == 200) {
-        router.push("/");
-      } else {
-        alert(errorMsg);
-      }
+      store.dispatch("uploadVideo", form);
     };
-
-    // watchEffect(() => {
-    //   console.log(form.description);
-    // });
 
     return { form, handleSubmit };
   },

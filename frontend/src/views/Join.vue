@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>Join</h3>
-    <form id="form" v-on:submit.prevent="handleSubmit" autocomplete="off" >
+    <form id="form" v-on:submit.prevent="handleSubmit" autocomplete="off">
       <input v-model="form.name" type="text" name="name" placeholder="name" />
       <br />
       <input v-model="form.email" type="email" email placeholder="email" />
@@ -43,8 +43,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
-import { instance } from "../main";
+import { computed, defineComponent, onUnmounted, reactive, ref } from "vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
@@ -57,17 +57,21 @@ export default defineComponent({
       location: "test",
     });
 
-    const errorMsg = ref(null);
+    const store = useStore();
+
+    const errorMsg = computed(() => {
+      const { errorMsg } = store.getters["user/getErrorMsg"];
+
+      return errorMsg;
+    });
 
     const handleSubmit = async () => {
-      const res = await instance.post(window.location.pathname, form);
-
-      if (res.data.status == 200) {
-        alert("가입완료");
-      } else {
-        errorMsg.value = res.data.errorMsg;
-      }
+      store.dispatch("user/join", form);
     };
+
+    onUnmounted(() => {
+      store.commit("user/clearError");
+    });
 
     return { form, errorMsg, handleSubmit };
   },

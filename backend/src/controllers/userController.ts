@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/Users";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const getJoin = (req: Request, res: Response) => {
   res.send({ pageTitle: "Join" });
@@ -10,8 +11,7 @@ export const postJoin = async (req: Request, res: Response) => {
   try {
     const { name, email, username, password, password2, location } = req.body;
 
-    console.log(req.body);
-    console.log(req.headers);
+    // console.log(req.body);
 
     if (password != password2) {
       return res.send({ status: 400, errorMsg: "Password confirmation does not match." });
@@ -38,7 +38,9 @@ export const postJoin = async (req: Request, res: Response) => {
   }
 };
 
-export const edit = (req: Request, res: Response) => res.send("Edit User");
+export const getEdit = (req: Request, res: Response) => res.send("Edit User");
+export const postEdit = (req: Request, res: Response) => res.send("Edit User");
+
 export const remove = (req: Request, res: Response) => res.send("Remove User");
 
 export const getLogin = async (req: Request, res: Response) => {
@@ -46,7 +48,8 @@ export const getLogin = async (req: Request, res: Response) => {
 };
 
 export const postLogin = async (req: Request, res: Response) => {
-  // console.log(req.body);
+  console.log(req.body);
+  
   const { username, password } = req.body;
 
   const user = await User.findOne({ username });
@@ -61,12 +64,16 @@ export const postLogin = async (req: Request, res: Response) => {
     return res.send({ status: 400, errorMsg: "Wrong password" });
   }
 
+  // console.log(user._id);
+
+  const token = jwt.sign({ id: user._id }, String(process.env.SECRET_KEY));
+
   // req.session.user = user;
   // req.session.loggedIn = true;
 
   // req.session.save();
 
-  return res.send({ status: 200, loggedIn: true, user });
+  return res.send({ status: 200, loggedIn: true, user: token });
 };
 
 export const logout = async (req: Request, res: Response) => {

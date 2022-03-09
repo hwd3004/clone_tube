@@ -40,11 +40,8 @@ import {
   defineComponent,
   onMounted,
   reactive,
-  watchEffect,
 } from "@vue/runtime-core";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { instance } from "../../main";
 
 export default defineComponent({
   setup() {
@@ -53,8 +50,6 @@ export default defineComponent({
       description: "",
       hashtags: "",
     });
-
-    const router = useRouter();
 
     const store = useStore();
 
@@ -78,23 +73,8 @@ export default defineComponent({
     });
 
     const handleSubmit = async (e: Event) => {
-      const res = await instance.post(location.pathname, form);
-      const {
-        data: { status, errorMsg },
-      } = res;
-
-      if (status == 200) {
-        router.push("/");
-      } else {
-        alert(errorMsg);
-      }
+      store.dispatch("editVideo", { url: location.pathname, form });
     };
-
-    // watchEffect(() => {
-    //   console.log(form.title);
-    //   console.log(form.description);
-    //   console.log(form.hashtags);
-    // });
 
     return { form, handleSubmit };
   },

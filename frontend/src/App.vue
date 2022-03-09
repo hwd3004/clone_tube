@@ -7,6 +7,7 @@
         <router-link to="/login">Log In</router-link>
       </span>
       <span v-else>
+        <router-link to="/users/edit">Edit Profile</router-link> |
         <span id="logout" @click="logout">Log Out</span>
       </span>
     </div>

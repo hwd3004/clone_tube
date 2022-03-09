@@ -19,7 +19,7 @@ export const instance = axios.create({
     loggedin: getLsLoggedIn(),
     // headers의 이름들은 소문자만 가능
 
-    // "Content-Type": "multipart/form-data",
+    "Content-Type": "multipart/form-data",
   },
 });
 

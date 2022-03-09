@@ -7,6 +7,7 @@ import PageNotFound from "../components/PageNotFound.vue";
 import Search from "../views/Search.vue";
 import Join from "../views/Join.vue";
 import Login from "../views/Login.vue";
+import EditProfile from "../views/EditProfile.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -36,6 +37,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/login",
     component: Login,
+  },
+  {
+    path: "/users/edit",
+    component: EditProfile,
   },
   {
     path: "/:pathMatch(.*)",

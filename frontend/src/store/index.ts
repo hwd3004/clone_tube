@@ -1,6 +1,7 @@
 import { instance } from "@/main";
 import { createStore, storeKey } from "vuex";
 import user from "./modules/user";
+import router from "../router";
 
 export default createStore({
   state: {
@@ -84,6 +85,42 @@ export default createStore({
       } = await instance.get(`${url}/delete`);
 
       return { status };
+    },
+    uploadVideo: async function (context, payload) {
+      const formdata = new FormData();
+
+      for (const key in payload) {
+        formdata.append(key, payload[key]);
+      }
+
+      const res = await instance.post("/videos/upload", formdata);
+
+      const { status, errorMsg }: { status: number; errorMsg: string } = res.data;
+
+      if (status == 200) {
+        router.push("/");
+      } else {
+        alert(errorMsg);
+      }
+    },
+    editVideo: async function (context, payload) {
+      const formdata = new FormData();
+
+      const { url, form } = payload;
+
+      for (const key in form) {
+        formdata.append(key, form[key]);
+      }
+
+      const res = await instance.post(url, formdata);
+      
+      const { status, errorMsg } = res.data;
+
+      if (status == 200) {
+        router.push("/");
+      } else {
+        alert(errorMsg);
+      }
     },
   },
   modules: {
