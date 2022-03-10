@@ -60,8 +60,7 @@ const user = {
       localStorage.removeItem("user");
       localStorage.removeItem("loggedIn");
 
-      state.user = {};
-      state.loggedIn = false;
+      location.href = "/";
     },
     setJoin: function (state: any, payload: any) {
       const { status, errorMsg } = payload;
@@ -120,6 +119,15 @@ const user = {
         router.push("/");
       } catch (error) {
         console.error(error);
+      }
+    },
+    filterPublicOnly: async function (context: any, payload: any) {
+      const { url } = payload;
+      const res = await instance.get(url);
+      const { status } = res.data;
+
+      if (status == 403) {
+        router.push("/");
       }
     },
   },

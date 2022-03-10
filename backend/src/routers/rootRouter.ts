@@ -1,6 +1,10 @@
 import express from "express";
-import { getJoin, postJoin, getLogin, postLogin } from "../controllers/userController";
-import { home, search } from "../controllers/videoController";
+import userCon from "../controllers/userController";
+import videoCon from "../controllers/videoController";
+
+const { getJoin, postJoin, getLogin, postLogin } = userCon;
+
+const { home, search } = videoCon;
 
 const rootRouter = express.Router();
 

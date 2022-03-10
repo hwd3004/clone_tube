@@ -59,6 +59,8 @@ export default defineComponent({
 
     const store = useStore();
 
+    store.dispatch("user/filterPublicOnly", { url: location.pathname });
+
     const errorMsg = computed(() => {
       const { errorMsg } = store.getters["user/getErrorMsg"];
 

@@ -23,7 +23,7 @@ const app = express();
 //     secret: "secret",
 //     resave: false, // 재저장을 계속 할 것인지 정보, 세션에 변화가 없어도 계속 저장한다는 옵션이다.(false 권장)
 //     saveUninitialized: false, // True일 경우 세션 저장 전 unitialized 상태로 미리 저장한다
-//     cookie: { maxAge: 3.6e6 * 24 }, // 24시간 뒤 만료(자동 삭제)
+//     cookie: {},
 //     store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/clone_tube" }),
 //   })
 // );
@@ -52,18 +52,9 @@ declare module "express-session" {
 }
 
 // app.use((req, res, next) => {
-//   // console.log(req.sessionID)
-
-//   // 브라우저가 request할 때 같이 보내는 session id
-
-//   // res.locals.loggedIn = req.session.loggedIn;
-//   // res.locals.user = req.session.user;
-//   // res.locals.siteName = "clone_tube";
-
-//   console.log(req.session.user);
-//   console.log(req.session.loggedIn);
-//   console.log(req.session.cookie);
-//   console.log(req.sessionID);
+//   res.locals.loggedIn = req.session.loggedIn;
+//   res.locals.user = req.session.user;
+//   res.locals.siteName = "clone_tube";
 
 //   next();
 // });

@@ -35,6 +35,8 @@ export default defineComponent({
 
     const store = useStore();
 
+    store.dispatch("user/filterPublicOnly", { url: location.pathname });
+
     const handleSubmit = async () => {
       await store.dispatch("user/login", form);
     };

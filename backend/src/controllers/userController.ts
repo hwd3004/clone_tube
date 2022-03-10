@@ -1,13 +1,14 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import User from "../models/Users";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { filterPublicOnly, filterUnauthorized } from "../middlewares";
 
-export const getJoin = (req: Request, res: Response) => {
+const getJoin = (req: Request, res: Response) => {
   res.send({ pageTitle: "Join" });
 };
 
-export const postJoin = async (req: Request, res: Response) => {
+const postJoin = async (req: Request, res: Response) => {
   try {
     const { name, email, username, password, password2, location } = req.body;
 
@@ -38,18 +39,13 @@ export const postJoin = async (req: Request, res: Response) => {
   }
 };
 
-export const getEdit = (req: Request, res: Response) => res.send("Edit User");
-export const postEdit = (req: Request, res: Response) => res.send("Edit User");
-
-export const remove = (req: Request, res: Response) => res.send("Remove User");
-
-export const getLogin = async (req: Request, res: Response) => {
+const getLogin = async (req: Request, res: Response) => {
   res.send("Login");
 };
 
-export const postLogin = async (req: Request, res: Response) => {
+const postLogin = async (req: Request, res: Response) => {
   console.log(req.body);
-  
+
   const { username, password } = req.body;
 
   const user = await User.findOne({ username });
@@ -71,12 +67,10 @@ export const postLogin = async (req: Request, res: Response) => {
   // req.session.user = user;
   // req.session.loggedIn = true;
 
-  // req.session.save();
-
   return res.send({ status: 200, loggedIn: true, user: token });
 };
 
-export const logout = async (req: Request, res: Response) => {
+const logout = async (req: Request, res: Response) => {
   try {
     let user: any = req.headers.user;
     // user = JSON.parse(user);
@@ -98,4 +92,34 @@ export const logout = async (req: Request, res: Response) => {
     });
   }
 };
-export const see = (req: Request, res: Response) => res.send("See User");
+
+const see = (req: Request, res: Response) => res.send("See User");
+
+const getEdit = async (req: Request, res: Response, next: NextFunction, payload: any) => {
+  try {
+    const { user } = payload;
+
+    const userObj = await User.findById(user.id);
+
+    return res.send({ status: 200, user: userObj });
+  } catch (error) {
+    console.log(error);
+    return res.send({ status: 400, errorMsg: "error" });
+  }
+};
+
+const postEdit = (req: Request, res: Response) => res.send("Edit User");
+
+const remove = (req: Request, res: Response) => res.send("Remove User");
+
+export default {
+  getJoin: filterPublicOnly(getJoin),
+  postJoin: filterPublicOnly(postJoin),
+  getLogin: filterPublicOnly(getLogin),
+  postLogin: filterPublicOnly(postLogin),
+  logout: filterPublicOnly(logout),
+  see,
+  getEdit: filterUnauthorized(getEdit),
+  postEdit,
+  remove,
+};

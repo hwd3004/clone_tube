@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import Video from "../models/Videos";
 
-export const home = async (req: Request, res: Response) => {
+const home = async (req: Request, res: Response) => {
   // https://mongoosejs.com/docs/api.html#query_Query-sort
   const videos = await Video.find({}).sort({ createdAt: "desc" });
 
   return res.send({ pageTitle: "home", videos });
 };
 
-export const watch = async (req: Request, res: Response) => {
+const watch = async (req: Request, res: Response) => {
   try {
     const {
       params: { id },
@@ -32,11 +32,13 @@ export const watch = async (req: Request, res: Response) => {
   }
 };
 
-export const getEdit = async (req: Request, res: Response) => {
+const getEdit = async (req: Request, res: Response, next: any) => {
   try {
     const {
       params: { id },
     } = req;
+
+    // console.log("next : ", next);
 
     const video = await Video.findById(id);
 
@@ -52,7 +54,7 @@ export const getEdit = async (req: Request, res: Response) => {
   }
 };
 
-export const postEdit = async (req: Request, res: Response) => {
+const postEdit = async (req: Request, res: Response) => {
   try {
     const {
       params: { id },
@@ -104,7 +106,7 @@ export const postEdit = async (req: Request, res: Response) => {
   }
 };
 
-export const search = async (req: Request, res: Response) => {
+const search = async (req: Request, res: Response) => {
   // console.log(req.query.keyword);
 
   // https://stackoverflow.com/questions/63538665/how-to-type-request-query-in-express-using-typescript
@@ -123,7 +125,7 @@ export const search = async (req: Request, res: Response) => {
   return res.send({ pageTitle: "Search", videos });
 };
 
-export const deleteVideo = async (req: Request, res: Response) => {
+const deleteVideo = async (req: Request, res: Response) => {
   try {
     const {
       params: { id },
@@ -144,8 +146,8 @@ export const deleteVideo = async (req: Request, res: Response) => {
   }
 };
 
-export const getUpload = (req: Request, res: Response) => res.send("Upload");
-export const postUpload = async (req: Request, res: Response) => {
+const getUpload = (req: Request, res: Response) => res.send("Upload");
+const postUpload = async (req: Request, res: Response) => {
   try {
     console.log(req.body);
 
@@ -168,4 +170,15 @@ export const postUpload = async (req: Request, res: Response) => {
       errorMsg: "Cannot Upload Video.",
     });
   }
+};
+
+export default {
+  getUpload,
+  postUpload,
+  deleteVideo,
+  search,
+  getEdit,
+  postEdit,
+  watch,
+  home,
 };
