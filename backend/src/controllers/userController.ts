@@ -108,7 +108,14 @@ const getEdit = async (req: Request, res: Response, next: NextFunction, payload:
   }
 };
 
-const postEdit = (req: Request, res: Response) => res.send("Edit User");
+const postEdit = async (req: Request, res: Response, next: NextFunction, payload: any) => {
+  console.log(payload);
+  console.log(req.body);
+
+  // await User.findByIdAndUpdate()
+
+  res.send("Edit User");
+};
 
 const remove = (req: Request, res: Response) => res.send("Remove User");
 
@@ -120,6 +127,6 @@ export default {
   logout: filterPublicOnly(logout),
   see,
   getEdit: filterUnauthorized(getEdit),
-  postEdit,
+  postEdit: filterUnauthorized(postEdit),
   remove,
 };

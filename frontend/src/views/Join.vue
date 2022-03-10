@@ -4,7 +4,12 @@
     <form id="form" v-on:submit.prevent="handleSubmit" autocomplete="off">
       <input v-model="form.name" type="text" name="name" placeholder="name" />
       <br />
-      <input v-model="form.email" type="email" email placeholder="email" />
+      <input
+        v-model="form.email"
+        type="email"
+        name="email"
+        placeholder="email"
+      />
       <br />
       <input
         v-model="form.username"
@@ -68,7 +73,7 @@ export default defineComponent({
     });
 
     const handleSubmit = async () => {
-      store.dispatch("user/join", form);
+      await store.dispatch("user/join", form);
     };
 
     onUnmounted(() => {

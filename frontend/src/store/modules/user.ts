@@ -121,6 +121,16 @@ const user = {
         console.error(error);
       }
     },
+    editProfile: async function (context: any, payload: any) {
+      const formdata = new FormData();
+
+      for (const key in payload) {
+        formdata.append(key, payload[key]);
+      }
+
+      const res = await instance.post("/users/edit", formdata);
+      console.log(res);
+    },
     filterPublicOnly: async function (context: any, payload: any) {
       const { url } = payload;
       const res = await instance.get(url);
