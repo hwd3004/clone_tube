@@ -2,42 +2,60 @@
   <div>
     <h3>Join</h3>
     <form id="form" v-on:submit.prevent="handleSubmit" autocomplete="off">
-      <input v-model="form.name" type="text" name="name" placeholder="name" />
+      <label>
+        <span>name : </span>
+        <input v-model="form.name" type="text" name="name" placeholder="name" />
+      </label>
       <br />
-      <input
-        v-model="form.email"
-        type="email"
-        name="email"
-        placeholder="email"
-      />
+      <label>
+        <span>email : </span>
+        <input
+          v-model="form.email"
+          type="email"
+          name="email"
+          placeholder="email"
+        />
+      </label>
       <br />
-      <input
-        v-model="form.username"
-        type="text"
-        name="username"
-        placeholder="username"
-      />
+      <label>
+        <span>username : </span>
+        <input
+          v-model="form.username"
+          type="text"
+          name="username"
+          placeholder="username"
+        />
+      </label>
       <br />
-      <input
-        v-model="form.password"
-        type="password"
-        name="password"
-        placeholder="password"
-      />
+      <label>
+        <span>password : </span>
+        <input
+          v-model="form.password"
+          type="password"
+          name="password"
+          placeholder="password"
+        />
+      </label>
       <br />
-      <input
-        v-model="form.password2"
-        type="password"
-        name="password2"
-        placeholder="confirm password"
-      />
+      <label>
+        <span>confirm password : </span>
+        <input
+          v-model="form.password2"
+          type="password"
+          name="password2"
+          placeholder="confirm password"
+        />
+      </label>
       <br />
-      <input
-        v-model="form.location"
-        type="text"
-        name="location"
-        placeholder="location"
-      />
+      <label>
+        <span>location : </span>
+        <input
+          v-model="form.location"
+          type="text"
+          name="location"
+          placeholder="location"
+        />
+      </label>
       <br />
       <input type="submit" />
     </form>
@@ -54,12 +72,12 @@ import { useStore } from "vuex";
 export default defineComponent({
   setup() {
     const form = reactive({
-      name: "test",
-      email: "test@test.com",
-      username: "test_user",
-      password: "test",
-      password2: "test",
-      location: "test",
+      name: "",
+      email: "",
+      username: "",
+      password: "",
+      password2: "",
+      location: "",
     });
 
     const store = useStore();

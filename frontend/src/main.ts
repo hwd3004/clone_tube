@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
 // https://vueup.github.io/vue-quill/guide/themes.html
 import { QuillEditor } from "@vueup/vue-quill";
@@ -11,13 +11,32 @@ import { getLsUser, getLsLoggedIn } from "./store/modules/user";
 
 export const instance = axios.create({
   baseURL: "http://localhost:4000",
-  headers: {
-    user: JSON.stringify(getLsUser()),
-    loggedin: JSON.stringify(getLsLoggedIn()),
-    // headers의 이름들은 소문자만 가능
+  // headers: {
+  //   user: JSON.stringify(getLsUser()),
+  //   loggedin: JSON.stringify(getLsLoggedIn()),
+  //   // headers의 이름들은 소문자만 가능
 
-    "Content-Type": "multipart/form-data",
-  },
+  //   "Content-Type": "multipart/form-data",
+  // },
 });
+
+instance.interceptors.request.use(
+  (config: AxiosRequestConfig<any>) => {
+    config.headers = {
+      ...config.headers,
+      user: JSON.stringify(getLsUser()),
+      loggedin: JSON.stringify(getLsLoggedIn()),
+      // headers의 이름들은 소문자만 가능
+
+      "Content-Type": "multipart/form-data",
+    };
+
+    return config;
+  },
+  (error: any) => {
+    console.log(error);
+    return error;
+  }
+);
 
 createApp(App).use(store).use(router).component("QuillEditor", QuillEditor).mount("#app");

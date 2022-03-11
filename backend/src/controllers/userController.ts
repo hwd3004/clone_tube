@@ -16,11 +16,11 @@ const postJoin = async (req: Request, res: Response) => {
       return res.send({ status: 400, errorMsg: "Password confirmation does not match." });
     }
 
-    const exists = await User.exists({ $or: [{ username, email }] });
+    // const exists = await User.exists({ $or: [{ username, email }] });
 
-    if (exists) {
-      return res.send({ status: 400, errorMsg: "This username/email is already taken." });
-    }
+    // if (exists) {
+    //   return res.send({ status: 400, errorMsg: "This username/email is already taken." });
+    // }
 
     await User.create({
       name,
@@ -31,8 +31,12 @@ const postJoin = async (req: Request, res: Response) => {
     });
 
     return res.send({ status: 200 });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    if (error.code == 11000) {
+      const duplicateKey = Object.keys(error.keyValue)[0];
+
+      return res.send({ status: 400, errorMsg: `This ${duplicateKey} is already exist.` });
+    }
     return res.send({ status: 400, errorMsg: "error" });
   }
 };

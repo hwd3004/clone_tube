@@ -52,8 +52,8 @@ const user = {
         state.loggedIn = loggedIn;
 
         // https://youtu.be/eWDHkIdK4Sc?t=219
-        // router.push("/");
-        location.href = "/";
+        router.push("/");
+        // location.href = "/";
       }
     },
     setLogout: function (state: any, payload: any) {

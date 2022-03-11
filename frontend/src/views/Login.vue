@@ -2,7 +2,7 @@
   <div>
     <h1>login</h1>
     <form v-on:submit.prevent="handleSubmit" autocomplete="off">
-      <input v-model="form.username" type="text" name="username" />
+      <input v-model="form.username" type="text" name="username" placeholder="username" />
       <br />
       <input
         v-model="form.password"
@@ -20,19 +20,12 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onUnmounted,
-  reactive,
-  watchEffect,
-} from "vue";
+import { computed, defineComponent, onUnmounted, reactive } from "vue";
 import { useStore } from "vuex";
-import { getLsLoggedIn, getLsUser } from "../store/modules/user";
 
 export default defineComponent({
   setup() {
-    const form = reactive({ username: "test_user", password: "test" });
+    const form = reactive({ username: "", password: "" });
 
     const store = useStore();
 
@@ -57,5 +50,3 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-</style>

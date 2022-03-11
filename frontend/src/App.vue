@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, onUpdated } from "vue";
+import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import SearchForm from "./components/SearchForm.vue";
 
