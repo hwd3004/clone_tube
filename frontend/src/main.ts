@@ -9,14 +9,11 @@ import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { getLsUser, getLsLoggedIn } from "./store/modules/user";
 
-// getLsUser();
-// getLsLoggedIn();
-
 export const instance = axios.create({
   baseURL: "http://localhost:4000",
   headers: {
     user: JSON.stringify(getLsUser()),
-    loggedin: getLsLoggedIn(),
+    loggedin: JSON.stringify(getLsLoggedIn()),
     // headers의 이름들은 소문자만 가능
 
     "Content-Type": "multipart/form-data",

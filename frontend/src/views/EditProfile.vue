@@ -56,11 +56,12 @@
         <input type="submit" />
       </label>
     </form>
+    <p>{{ msg }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import { useStore } from "vuex";
 import { instance } from "../main";
 
@@ -75,17 +76,21 @@ export default defineComponent({
       location: "",
     });
 
+    const msg = ref("");
+
     const init = async () => {
-      const res = await instance.get("/users/edit");
+      await instance.get("/users/edit").then((res) => {
+        console.log(res.data.user);
 
-      const { name, email, username, password, location } = res.data.user;
+        const { name, email, username, password, location } = res.data.user;
 
-      form.name = name;
-      form.email = email;
-      form.username = username;
-      // form.password = password;
-      // form.password2 = password;
-      form.location = location;
+        form.name = name;
+        form.email = email;
+        form.username = username;
+        // form.password = password;
+        // form.password2 = password;
+        form.location = location;
+      });
     };
 
     init();
@@ -93,10 +98,19 @@ export default defineComponent({
     const store = useStore();
 
     const handleSubmit = async () => {
-      store.dispatch("user/editProfile", form);
+      const { status, errorMsg } = await store.dispatch(
+        "user/editProfile",
+        form
+      );
+
+      if (status == 200) {
+        msg.value = "Updated Profile.";
+      } else {
+        msg.value = errorMsg;
+      }
     };
 
-    return { form, handleSubmit };
+    return { form, handleSubmit, msg };
   },
 });
 </script>

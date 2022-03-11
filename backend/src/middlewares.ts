@@ -15,15 +15,21 @@ export const filterPublicOnly = (resolver: any) => {
 
 export const filterUnauthorized = (resolver: any) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const token: string = JSON.parse(req.headers.user as string);
-    const loggedIn: string = JSON.parse(req.headers.loggedin as string);
+    try {
+      const token: string = JSON.parse(req.headers.user as string);
+      const loggedIn: string = JSON.parse(req.headers.loggedin as string);
 
-    if (!loggedIn) {
-      return res.send({ status: 401, errorMsg: "It need Log In." });
+      if (!loggedIn) {
+        return res.send({ status: 401, errorMsg: "It need Log In." });
+      }
+
+      const user: any = jwt.verify(token, process.env.SECRET_KEY as string);
+      const { id } = user;
+
+      return resolver(req, res, next, { id });
+    } catch (error) {
+      console.log(error);
+      return res.send({ status: 400, errorMsg: "error" });
     }
-
-    const user = jwt.verify(token, process.env.SECRET_KEY as string);
-
-    return resolver(req, res, next, { user });
   };
 };

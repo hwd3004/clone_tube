@@ -7,6 +7,7 @@
         <router-link to="/login">Log In</router-link>
       </span>
       <span v-else>
+        <router-link to="/videos/upload">Upload Video</router-link> |
         <router-link to="/users/edit">Edit Profile</router-link> |
         <span id="logout" @click="logout">Log Out</span>
       </span>
@@ -21,10 +22,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, onMounted, onUpdated } from "vue";
 import { useStore } from "vuex";
 import SearchForm from "./components/SearchForm.vue";
-import { instance } from "./main";
 
 export default defineComponent({
   components: {
@@ -38,8 +38,6 @@ export default defineComponent({
     });
 
     const logout = async () => {
-      // const res = await instance.get("/users/logout");
-      // console.log(res);
       await store.dispatch("user/logout");
     };
 

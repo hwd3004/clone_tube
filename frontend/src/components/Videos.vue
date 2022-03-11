@@ -13,7 +13,6 @@
       </div>
     </div>
     <br />
-    <router-link to="/videos/upload"><button>upload</button></router-link>
   </div>
 </template>
 

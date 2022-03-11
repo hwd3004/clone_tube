@@ -28,6 +28,7 @@ import {
   watchEffect,
 } from "vue";
 import { useStore } from "vuex";
+import { getLsLoggedIn, getLsUser } from "../store/modules/user";
 
 export default defineComponent({
   setup() {

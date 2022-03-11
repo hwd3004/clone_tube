@@ -1,22 +1,21 @@
 import { instance } from "../../main";
 import router from "../../router";
 
+const TOKEN = "token";
+const LOGGED_IN = "loggedIn";
+
 export const getLsUser = () => {
-  const data = JSON.parse(localStorage.getItem("user"));
-  // console.log(data);
-  return data;
+  return JSON.parse(localStorage.getItem(TOKEN));
 };
 export const getLsLoggedIn = () => {
-  const data = JSON.parse(localStorage.getItem("loggedIn"));
-  // console.log(data);
-  return data;
+  return JSON.parse(localStorage.getItem(LOGGED_IN));
 };
 
 const setLsUser = (user: any) => {
-  localStorage.setItem("user", JSON.stringify(user));
+  localStorage.setItem(TOKEN, JSON.stringify(user));
 };
 const setLsLoggedIn = (loggedIn: boolean) => {
-  localStorage.setItem("loggedIn", String(loggedIn));
+  localStorage.setItem(LOGGED_IN, String(loggedIn));
 };
 
 const user = {
@@ -53,12 +52,13 @@ const user = {
         state.loggedIn = loggedIn;
 
         // https://youtu.be/eWDHkIdK4Sc?t=219
-        router.push("/");
+        // router.push("/");
+        location.href = "/";
       }
     },
     setLogout: function (state: any, payload: any) {
-      localStorage.removeItem("user");
-      localStorage.removeItem("loggedIn");
+      localStorage.removeItem(TOKEN);
+      localStorage.removeItem(LOGGED_IN);
 
       location.href = "/";
     },
@@ -128,8 +128,11 @@ const user = {
         formdata.append(key, payload[key]);
       }
 
-      const res = await instance.post("/users/edit", formdata);
-      console.log(res);
+      const {
+        data: { status, errorMsg },
+      } = await instance.post("/users/edit", formdata);
+
+      return { status, errorMsg };
     },
     filterPublicOnly: async function (context: any, payload: any) {
       const { url } = payload;

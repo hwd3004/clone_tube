@@ -12,8 +12,6 @@ const postJoin = async (req: Request, res: Response) => {
   try {
     const { name, email, username, password, password2, location } = req.body;
 
-    // console.log(req.body);
-
     if (password != password2) {
       return res.send({ status: 400, errorMsg: "Password confirmation does not match." });
     }
@@ -44,8 +42,6 @@ const getLogin = async (req: Request, res: Response) => {
 };
 
 const postLogin = async (req: Request, res: Response) => {
-  console.log(req.body);
-
   const { username, password } = req.body;
 
   const user = await User.findOne({ username });
@@ -97,9 +93,9 @@ const see = (req: Request, res: Response) => res.send("See User");
 
 const getEdit = async (req: Request, res: Response, next: NextFunction, payload: any) => {
   try {
-    const { user } = payload;
+    const { id } = payload;
 
-    const userObj = await User.findById(user.id);
+    const userObj = await User.findById(id);
 
     return res.send({ status: 200, user: userObj });
   } catch (error) {
@@ -109,12 +105,33 @@ const getEdit = async (req: Request, res: Response, next: NextFunction, payload:
 };
 
 const postEdit = async (req: Request, res: Response, next: NextFunction, payload: any) => {
-  console.log(payload);
-  console.log(req.body);
+  try {
+    const { id } = payload;
+    const { name, email, username, location } = req.body;
 
-  // await User.findByIdAndUpdate()
+    await User.findByIdAndUpdate(
+      id,
+      {
+        name,
+        email,
+        username,
+        location,
+      },
+      { new: true }
+    );
+    // findByIdAndUpdate를 리턴받으면 기본적으로 업데이트 하기 전의 데이터를 받음
+    // 데이터 업데이트 이후의 값을 리턴받으려면 옵션으로 {new: true}를 추가해야함
 
-  res.send("Edit User");
+    return res.send({ status: 200 });
+  } catch (error: any) {
+    if (error.codeName == "DuplicateKey") {
+      const duplicateKey = Object.keys(error.keyValue)[0];
+
+      return res.send({ status: 400, errorMsg: `This ${duplicateKey} is already exist.` });
+    }
+
+    return res.send({ status: 400, errorMsg: "error" });
+  }
 };
 
 const remove = (req: Request, res: Response) => res.send("Remove User");
