@@ -79,18 +79,16 @@ export default defineComponent({
     const msg = ref("");
 
     const init = async () => {
-      await instance.get("/users/edit").then((res) => {
-        console.log(res.data.user);
+      const res = await instance.get("/users/edit");
 
-        const { name, email, username, password, location } = res.data.user;
+      const { name, email, username, password, location } = res.data.user;
 
-        form.name = name;
-        form.email = email;
-        form.username = username;
-        // form.password = password;
-        // form.password2 = password;
-        form.location = location;
-      });
+      form.name = name;
+      form.email = email;
+      form.username = username;
+      // form.password = password;
+      // form.password2 = password;
+      form.location = location;
     };
 
     init();
