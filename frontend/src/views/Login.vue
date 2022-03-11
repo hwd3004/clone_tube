@@ -2,7 +2,12 @@
   <div>
     <h1>login</h1>
     <form v-on:submit.prevent="handleSubmit" autocomplete="off">
-      <input v-model="form.username" type="text" name="username" placeholder="username" />
+      <input
+        v-model="form.username"
+        type="text"
+        name="username"
+        placeholder="username"
+      />
       <br />
       <input
         v-model="form.password"
@@ -29,7 +34,7 @@ export default defineComponent({
 
     const store = useStore();
 
-    store.dispatch("user/filterPublicOnly", { url: location.pathname });
+    store.dispatch("user/filterPublicOnly");
 
     const handleSubmit = async () => {
       await store.dispatch("user/login", form);

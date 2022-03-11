@@ -124,6 +124,8 @@ const user = {
     editProfile: async function (context: any, payload: any) {
       const formdata = new FormData();
 
+      console.log(payload);
+
       for (const key in payload) {
         formdata.append(key, payload[key]);
       }
@@ -135,13 +137,30 @@ const user = {
       return { status, errorMsg };
     },
     filterPublicOnly: async function (context: any, payload: any) {
-      const { url } = payload;
-      const res = await instance.get(url);
-      const { status } = res.data;
-
-      if (status == 403) {
+      const loggedIn = getLsLoggedIn();
+      if (loggedIn) {
         router.push("/");
       }
+      // const { url } = payload;
+      // const res = await instance.get(url);
+      // const { status } = res.data;
+
+      // if (status == 403) {
+      //   router.push("/");
+      // }
+    },
+    filterUnauthorized: async function (context: any, payload: any) {
+      const loggedIn = getLsLoggedIn();
+      if (!loggedIn) {
+        router.push("/login");
+      }
+      // const { url } = payload;
+      // const res = await instance.get(url);
+      // const { status } = res.data;
+
+      // if (status == 401) {
+      //   router.push("/");
+      // }
     },
   },
 };

@@ -113,7 +113,7 @@ export default createStore({
       }
 
       const res = await instance.post(url, formdata);
-      
+
       const { status, errorMsg } = res.data;
 
       if (status == 200) {

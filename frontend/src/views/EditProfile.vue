@@ -28,22 +28,6 @@
         />
       </label>
       <br />
-      <!-- 
-      <input
-        v-model="form.password"
-        type="password"
-        name="password"
-        placeholder="password"
-      />
-      <br />
-      <input
-        v-model="form.password2"
-        type="password"
-        name="password2"
-        placeholder="confirm password"
-      />
-       -->
-      <!-- <br /> -->
       <label
         ><span>location - </span>
         <input
@@ -53,10 +37,23 @@
           placeholder="location"
         />
         <br />
+        <label>
+          <span>avatar - </span>
+          <input
+            @change="changeFile"
+            type="file"
+            name="file"
+            placeholder="image"
+            accept="image/*"
+          />
+        </label>
+        <br />
         <input type="submit" />
       </label>
     </form>
     <p>{{ msg }}</p>
+    <br />
+    <router-link to="/users/change_password">Change Password</router-link>
   </div>
 </template>
 
@@ -71,9 +68,8 @@ export default defineComponent({
       name: "",
       email: "",
       username: "",
-      // password: "",
-      // password2: "",
       location: "",
+      file: null,
     });
 
     const msg = ref("");
@@ -81,17 +77,20 @@ export default defineComponent({
     const init = async () => {
       const res = await instance.get("/users/edit");
 
-      const { name, email, username, password, location } = res.data.user;
+      const { name, email, username, location } = res.data.user;
 
       form.name = name;
       form.email = email;
       form.username = username;
-      // form.password = password;
-      // form.password2 = password;
       form.location = location;
     };
 
     init();
+
+    const changeFile = (e: any) => {
+      console.log(e.target.files[0]);
+      form.file = e;
+    };
 
     const store = useStore();
 
@@ -108,7 +107,7 @@ export default defineComponent({
       }
     };
 
-    return { form, handleSubmit, msg };
+    return { form, handleSubmit, msg, changeFile };
   },
 });
 </script>

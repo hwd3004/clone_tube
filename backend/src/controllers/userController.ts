@@ -95,7 +95,7 @@ const logout = async (req: Request, res: Response) => {
 
 const see = (req: Request, res: Response) => res.send("See User");
 
-const getEdit = async (req: Request, res: Response, next: NextFunction, payload: any) => {
+const getEdit = async (req: Request, res: Response, _next: NextFunction, payload: any) => {
   try {
     const { id } = payload;
 
@@ -108,7 +108,7 @@ const getEdit = async (req: Request, res: Response, next: NextFunction, payload:
   }
 };
 
-const postEdit = async (req: Request, res: Response, next: NextFunction, payload: any) => {
+const postEdit = async (req: Request, res: Response, _next: NextFunction, payload: any) => {
   try {
     const { id } = payload;
     const { name, email, username, location } = req.body;
@@ -140,6 +140,34 @@ const postEdit = async (req: Request, res: Response, next: NextFunction, payload
 
 const remove = (req: Request, res: Response) => res.send("Remove User");
 
+const postChangePassword = async (req: Request, res: Response, _next: NextFunction, payload: any) => {
+  try {
+    const { currentPassword, newPassword, newPassword2 } = req.body;
+    const { id } = payload;
+
+    const user = await User.findById(id);
+
+    const ok = await bcrypt.compare(currentPassword, user.password);
+
+    if (!ok) {
+      return res.send({ status: 400, errorMsg: "The current password is incorrect." });
+    }
+
+    if (newPassword != newPassword2) {
+      return res.send({ status: 400, errorMsg: "The password does not match the confirmation." });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 5);
+
+    await user.save();
+
+    return res.send({ status: 200 });
+  } catch (error) {
+    console.log(error);
+    return res.send({ status: 400, errorMsg: "error" });
+  }
+};
+
 export default {
   getJoin: filterPublicOnly(getJoin),
   postJoin: filterPublicOnly(postJoin),
@@ -150,4 +178,5 @@ export default {
   getEdit: filterUnauthorized(getEdit),
   postEdit: filterUnauthorized(postEdit),
   remove,
+  postChangePassword: filterUnauthorized(postChangePassword),
 };
