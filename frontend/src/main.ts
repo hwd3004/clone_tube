@@ -9,8 +9,10 @@ import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { getLsUser, getLsLoggedIn } from "./store/modules/user";
 
+export const baseURL = "http://localhost:4000";
+
 export const instance = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL,
   // headers: {
   //   user: JSON.stringify(getLsUser()),
   //   loggedin: JSON.stringify(getLsLoggedIn()),
@@ -39,4 +41,8 @@ instance.interceptors.request.use(
   }
 );
 
-createApp(App).use(store).use(router).component("QuillEditor", QuillEditor).mount("#app");
+createApp(App)
+  .use(store)
+  .use(router)
+  .component("QuillEditor", QuillEditor)
+  .mount("#app");

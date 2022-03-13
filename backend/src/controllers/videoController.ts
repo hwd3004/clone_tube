@@ -1,5 +1,8 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import Video from "../models/Videos";
+import { filterUnauthorized, videoFileUpload } from "../util";
+import User from "../models/Users";
+import jwt from "jsonwebtoken";
 
 const home = async (req: Request, res: Response) => {
   // https://mongoosejs.com/docs/api.html#query_Query-sort
@@ -14,21 +17,33 @@ const watch = async (req: Request, res: Response) => {
       params: { id },
     } = req;
 
-    const video = await Video.findById(id);
-    // console.log(video);
+    // const video = await Video.findById(id);
+    // const onwer = await User.findById(video.owner);
+    // 하나로 줄임
+    const video = await Video.findById(id).populate("owner");
+
+    const token: string = JSON.parse(req.headers.user as string);
+    const loggedIn: string = JSON.parse(req.headers.loggedin as string);
+
+    let currentUserId: any = null;
+
+    if (loggedIn) {
+      const user: any = jwt.verify(token, process.env.SECRET_KEY as string);
+      currentUserId = user.id;
+    }
 
     return res.send({
       status: 200,
       pageTitle: video.title,
       video,
+      currentUserId,
     });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     return res.send({
       status: 404,
       pageTitle: "Video not found.",
     });
-    // return res.send(404);
   }
 };
 
@@ -147,11 +162,23 @@ const deleteVideo = async (req: Request, res: Response) => {
 };
 
 const getUpload = (req: Request, res: Response) => res.send("Upload");
-const postUpload = async (req: Request, res: Response) => {
+const postUpload = async (req: Request, res: Response, next: NextFunction, payload: any) => {
   try {
-    console.log(req.body);
-
     const { title, description, hashtags } = req.body;
+
+    const { id } = payload;
+
+    const file: any = req.files;
+
+    const { status, errorMsg, fileUrl } = await videoFileUpload(file, id, title);
+
+    if (errorMsg) {
+      return res.send({
+        status: 400,
+        errorMsg,
+      });
+    }
+
     await Video.create({
       title,
       description,
@@ -160,6 +187,8 @@ const postUpload = async (req: Request, res: Response) => {
         views: 0,
         rating: 0,
       },
+      fileUrl,
+      owner: id,
     });
 
     return res.send({ status: 200 });
@@ -174,7 +203,7 @@ const postUpload = async (req: Request, res: Response) => {
 
 export default {
   getUpload,
-  postUpload,
+  postUpload: filterUnauthorized(postUpload),
   deleteVideo,
   search,
   getEdit,

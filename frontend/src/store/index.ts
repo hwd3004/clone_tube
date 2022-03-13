@@ -19,6 +19,7 @@ export default createStore({
       },
     ],
     loading: false,
+    currentUserId: null,
   },
   getters: {
     getVideo: (state) => {
@@ -27,14 +28,18 @@ export default createStore({
     getVideos: (state) => {
       return state.videos;
     },
+    getCurrentUserId: (state) => {
+      return state.currentUserId;
+    },
   },
   mutations: {
     setVideo: function (state, payload) {
-      const { video, pageTitle } = payload;
+      const { video, pageTitle, currentUserId } = payload;
       const { hashtags }: { hashtags: [] } = video;
       state.video = video;
       state.video.hashtags = hashtags.join();
       state.pageTitle = pageTitle;
+      state.currentUserId = currentUserId;
     },
     setVideos: function (state, payload: []) {
       state.videos = payload;
@@ -53,11 +58,9 @@ export default createStore({
       try {
         const { url } = payload;
 
-        const res = await instance.get(url);
+        const { data } = await instance.get(url);
 
-        const { video, pageTitle } = res.data;
-
-        context.commit("setVideo", { video, pageTitle });
+        context.commit("setVideo", data);
       } catch (error) {
         console.error(error);
       }

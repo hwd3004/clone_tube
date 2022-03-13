@@ -3,6 +3,9 @@
     <h1>Edit Profile</h1>
 
     <form id="form" v-on:submit.prevent="handleSubmit" autocomplete="off">
+      <div v-if="form.avatarUrl">
+        <img id="avatar" :src="form.avatarUrl" />
+      </div>
       <label>
         <span>name - </span>
         <input v-model="form.name" type="text" name="name" placeholder="name" />
@@ -42,7 +45,7 @@
           <input
             @change="changeFile"
             type="file"
-            name="file"
+            name="avatar"
             placeholder="image"
             accept="image/*"
           />
@@ -60,7 +63,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
 import { useStore } from "vuex";
-import { instance } from "../main";
+import { baseURL, instance } from "../main";
 
 export default defineComponent({
   setup() {
@@ -69,7 +72,8 @@ export default defineComponent({
       email: "",
       username: "",
       location: "",
-      file: null,
+      avatarUrl: null,
+      avatar: null,
     });
 
     const msg = ref("");
@@ -77,19 +81,20 @@ export default defineComponent({
     const init = async () => {
       const res = await instance.get("/users/edit");
 
-      const { name, email, username, location } = res.data.user;
+      const { name, email, username, location, avatarUrl } = res.data.user;
 
       form.name = name;
       form.email = email;
       form.username = username;
       form.location = location;
+      form.avatarUrl = `${baseURL}${avatarUrl}`;
     };
 
     init();
 
     const changeFile = (e: any) => {
-      console.log(e.target.files[0]);
-      form.file = e;
+      // console.log(e.target.files[0]);
+      form.avatar = e.target.files[0];
     };
 
     const store = useStore();
@@ -102,6 +107,7 @@ export default defineComponent({
 
       if (status == 200) {
         msg.value = "Updated Profile.";
+        init();
       } else {
         msg.value = errorMsg;
       }
@@ -111,3 +117,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+#avatar {
+  width: 300px;
+}
+</style>

@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onUnmounted, reactive, ref } from "vue";
+import { computed, defineComponent, onUnmounted, reactive } from "vue";
 import { useStore } from "vuex";
 
 export default defineComponent({
@@ -103,5 +103,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

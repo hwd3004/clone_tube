@@ -72,7 +72,7 @@ export default defineComponent({
       // form.description = video.value.description;
     });
 
-    const handleSubmit = async (e: Event) => {
+    const handleSubmit = async () => {
       store.dispatch("editVideo", { url: location.pathname, form });
     };
 

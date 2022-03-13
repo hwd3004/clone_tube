@@ -2,6 +2,14 @@
   <div>
     <form id="form" v-on:submit.prevent="handleSubmit">
       <input
+        type="file"
+        accept="video/*"
+        required
+        name="video"
+        @change="changeVideo"
+      />
+      <br />
+      <input
         type="text"
         name="title"
         placeholder="title"
@@ -43,15 +51,21 @@ export default defineComponent({
       description:
         "<p>dummy description</p><p>dummy description</p><p>dummy description</p>",
       hashtags: "dummy hashtags",
+      video: null,
     });
 
     const store = useStore();
 
-    const handleSubmit = async (e: Event) => {
+    const handleSubmit = async () => {
       store.dispatch("uploadVideo", form);
     };
 
-    return { form, handleSubmit };
+    // eslint-disable-next-line
+    const changeVideo = (e: any) => {
+      form.video = e.target.files[0];
+    };
+
+    return { form, handleSubmit, changeVideo };
   },
 });
 </script>

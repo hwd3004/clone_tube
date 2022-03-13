@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import User from "../models/Users";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { filterPublicOnly, filterUnauthorized } from "../middlewares";
+import { filterPublicOnly, filterUnauthorized, avatarFileUpload } from "../util";
 
 const getJoin = (req: Request, res: Response) => {
   res.send({ pageTitle: "Join" });
@@ -93,7 +93,24 @@ const logout = async (req: Request, res: Response) => {
   }
 };
 
-const see = (req: Request, res: Response) => res.send("See User");
+const see = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    return res.send({
+      status: 400,
+      errorMsg: "User not found.",
+    });
+  }
+
+  return res.send({
+    status: 200,
+    pageTitle: user.name,
+    user,
+  });
+};
 
 const getEdit = async (req: Request, res: Response, _next: NextFunction, payload: any) => {
   try {
@@ -111,11 +128,24 @@ const getEdit = async (req: Request, res: Response, _next: NextFunction, payload
 const postEdit = async (req: Request, res: Response, _next: NextFunction, payload: any) => {
   try {
     const { id } = payload;
+
     const { name, email, username, location } = req.body;
+
+    const file: any = req.files;
+
+    const { status, avatarUrl, errorMsg } = await avatarFileUpload(file, id);
+
+    if (errorMsg) {
+      return res.send({
+        status: 400,
+        errorMsg,
+      });
+    }
 
     await User.findByIdAndUpdate(
       id,
       {
+        avatarUrl,
         name,
         email,
         username,

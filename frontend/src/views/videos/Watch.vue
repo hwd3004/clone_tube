@@ -1,61 +1,46 @@
 <template>
   <div>
-    <div v-if="video">
-      <p>{{ video.title }}</p>
-      <p v-html="video.description"></p>
-      <p>{{ video.hashtags }}</p>
-      <p>{{ video.meta }}</p>
-      <p>{{ video.createdAt }}</p>
+    <p>{{ video.title }}</p>
+    <p v-html="video.description"></p>
+    <p>{{ video.hashtags }}</p>
+    <p>{{ video.meta }}</p>
+    <p>{{ video.createdAt }}</p>
+    <p>uploaded by {{ video.owner.name }}</p>
+    <p>{{ video.owner._id }}</p>
 
+    <div v-if="currentUserId == video.owner._id">
       <router-link v-bind:to="`/videos/${video._id}/edit`"
         ><button>Edit</button></router-link
       >
-
       &nbsp;
       <button @click="deleteVideo">Delete</button>
-    </div>
-    <div v-else>
-      <PageNotFound />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "@vue/runtime-core";
-import PageNotFound from "../../components/PageNotFound.vue";
-import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import { instance } from "@/main";
+import { defineComponent, reactive, ref } from "@vue/runtime-core";
 
 export default defineComponent({
-  components: {
-    PageNotFound,
-  },
   setup() {
-    const router = useRouter();
+    const video = ref({});
+    const currentUserId = ref("");
 
-    const store = useStore();
+    const init = async () => {
+      const url = location.pathname;
+      const { data } = await instance.get(url);
 
-    const url = location.pathname;
+      const initVideo = data.video;
+      initVideo.hashtags = initVideo.hashtags.join();
+      video.value = initVideo;
 
-    store.dispatch("fetchVideo", { url });
-
-    const video = computed(() => {
-      const data = store.getters["getVideo"];
-
-      return data;
-    });
-
-    const deleteVideo = async () => {
-      const { status, errorMsg } = await store.dispatch("deleteVideo", { url });
-
-      if (status == 200) {
-        router.push("/");
-      } else {
-        alert(errorMsg);
-      }
+      currentUserId.value = data.currentUserId;
     };
 
-    return { video, deleteVideo };
+    init();
+
+    return { video, currentUserId };
   },
 });
 </script>

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted } from "vue";
+import { defineComponent } from "vue";
 import Videos from "../components/Videos.vue";
 import { useStore } from "vuex";
 
