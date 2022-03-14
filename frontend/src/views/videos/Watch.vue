@@ -6,17 +6,17 @@
         <button id="play">Play</button>
         <button id="mute">Mute</button>
         <input id="volume" type="range" min="0" max="1" step="0.01" />
-        <div>
+        <span>
           <span id="currentTime">00:00:00</span>
           <span>&nbsp;/&nbsp;</span>
           <span id="totalTime">00:00:00</span>
-        </div>
-        <div>
+        </span>
+        <span>
           <input id="timeline" type="range" min="0" step="1" value="0" />
-        </div>
-        <div>
+        </span>
+        <span>
           <button id="fullscreen">Full Screen</button>
-        </div>
+        </span>
       </div>
     </div>
 
@@ -45,16 +45,9 @@
 
 <script lang="ts">
 import { instance } from "@/main";
-import {
-  defineComponent,
-  onMounted,
-  onUpdated,
-  reactive,
-  ref,
-} from "@vue/runtime-core";
+import { defineComponent, onMounted, ref } from "@vue/runtime-core";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import router from "../../router/index";
 
 export default defineComponent({
   setup() {
@@ -119,9 +112,11 @@ export default defineComponent({
         if (video.paused) {
           video.play();
           playBtn.innerText = "Pause";
+          setControls();
         } else {
           video.pause();
           playBtn.innerText = "Play";
+          setControls();
         }
       };
 
@@ -177,23 +172,40 @@ export default defineComponent({
       };
 
       const hideControls = () => {
-        videoContainer.classList.remove("showing");
+        videoControls.classList.add("hiding");
       };
 
-      const handleMouseMove = () => {
+      const showControls = () => {
+        videoControls.classList.remove("hiding");
+      };
+
+      const setControls = () => {
         if (controlsTimeout) {
           clearTimeout(controlsTimeout);
           controlsTimeout = null;
         }
 
-        videoContainer.classList.add("showing");
-        controlsTimeout = setTimeout(() => {
-          hideControls();
-        }, 2000);
+        showControls();
+
+        if (!video.paused) {
+          controlsTimeout = setTimeout(() => {
+            hideControls();
+          }, 1500);
+        }
+      };
+
+      const handleMouseMove = () => {
+        // 기본 로직
+        // 1. 마우스를 움직이면 기존 setTimeout을 clearTimeout이 지우고, 새로운 setTimeout을 만들고 실행
+        // 2. 그 상태에서 마우스를 움직이지 않으면 setTimeout이 정해진 시간 후 메소드 실행
+        // 3. 시간이 흐르는 중에 움직이면 1번으로 돌아감
+        setControls();
       };
 
       const handleMouseLeave = () => {
-        hideControls();
+        // if (!video.paused) {
+        //   hideControls();
+        // }
       };
 
       playBtn.addEventListener("click", handlePlay);
@@ -213,6 +225,7 @@ export default defineComponent({
       fullscreenBtn.addEventListener("click", handleFullScreen);
       video.addEventListener("mousemove", handleMouseMove);
       video.addEventListener("mouseleave", handleMouseLeave);
+      video.addEventListener("click", handlePlay);
     });
 
     return { video, currentUserId, deleteVideo };
@@ -220,8 +233,25 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-video {
-  width: 500px;
+<style lang="scss" scoped>
+/* https://cli.vuejs.org/guide/css.html#pre-processors */
+
+#videoContainer {
+  video {
+    width: 600px;
+  }
+
+  /* #videoControls {
+    display: block;
+  } */
+}
+
+.showing {
+  display: block;
+}
+
+.hiding {
+  display: none;
 }
 </style>
+
