@@ -1,7 +1,8 @@
 <template>
   <div>
     <div>
-      <button @click="temp">start recording</button>
+      <button id="startBtn">start recording</button>
+      <video id="preview"></video>
     </div>
     <form id="form" v-on:submit.prevent="handleSubmit">
       <input
@@ -44,9 +45,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "@vue/runtime-core";
+import { defineComponent, onMounted, reactive } from "@vue/runtime-core";
 import { useStore } from "vuex";
-import "regenerator-runtime"
+// import "regenerator-runtime"
 
 export default defineComponent({
   setup() {
@@ -69,16 +70,40 @@ export default defineComponent({
       form.video = e.target.files[0];
     };
 
-    const temp = async () => {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
+    onMounted(async () => {
+      const startBtn: HTMLButtonElement = document.querySelector("#startBtn");
+      const video: HTMLVideoElement = document.querySelector("#preview");
 
-      console.log(stream);
-    };
+      let handle = false;
 
-    return { form, handleSubmit, changeVideo, temp };
+      let stream;
+      const handleStart = async () => {
+        if (!handle) {
+          handle = true;
+          startBtn.innerText = "Stop Recording";
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: false,
+            video: true,
+          });
+          video.srcObject = stream;
+          video.play();
+
+          setInterval(() => {
+            console.log(video.srcObject);
+          }, 1000);
+        } else {
+          handle = false;
+          startBtn.innerText = "Start Recording";
+          stream = null;
+          video.pause();
+          console.log(video.srcObject);
+        }
+      };
+
+      startBtn.addEventListener("click", handleStart);
+    });
+
+    return { form, handleSubmit, changeVideo };
   },
 });
 </script>
