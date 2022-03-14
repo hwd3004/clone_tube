@@ -47,15 +47,17 @@ const watch = async (req: Request, res: Response) => {
   }
 };
 
-const getEdit = async (req: Request, res: Response, next: any) => {
+const getEdit = async (req: Request, res: Response, next: NextFunction, payload: any) => {
   try {
     const {
       params: { id },
     } = req;
 
-    // console.log("next : ", next);
-
     const video = await Video.findById(id);
+
+    if (video.owner.toString() != payload.id) {
+      return res.send({ status: 403, errorMsg: "you are not owner." });
+    }
 
     return res.send({
       status: 200,
@@ -140,13 +142,25 @@ const search = async (req: Request, res: Response) => {
   return res.send({ pageTitle: "Search", videos });
 };
 
-const deleteVideo = async (req: Request, res: Response) => {
+const deleteVideo = async (req: Request, res: Response, next: NextFunction, payload: any) => {
   try {
     const {
       params: { id },
     } = req;
 
+    const video = await Video.findById(id);
+
+    if (video.owner.toString() != payload.id) {
+      return res.send({ status: 403, errorMsg: "you are not owner." });
+    }
+
     await Video.findByIdAndDelete(id);
+
+    const user = await User.findById(payload.id);
+
+    user.videos.splice(video.owner);
+
+    user.save();
 
     // Model.findOneAndDelete()
     // Model.findOneAndRemove()
@@ -179,7 +193,7 @@ const postUpload = async (req: Request, res: Response, next: NextFunction, paylo
       });
     }
 
-    await Video.create({
+    const newVideo = await Video.create({
       title,
       description,
       hashtags: hashtags.split(",").map((word: string) => `#${word.trim()}`),
@@ -190,6 +204,10 @@ const postUpload = async (req: Request, res: Response, next: NextFunction, paylo
       fileUrl,
       owner: id,
     });
+
+    const user = await User.findById(id);
+    user.videos.push(newVideo._id);
+    user.save();
 
     return res.send({ status: 200 });
   } catch (error) {
@@ -204,10 +222,10 @@ const postUpload = async (req: Request, res: Response, next: NextFunction, paylo
 export default {
   getUpload,
   postUpload: filterUnauthorized(postUpload),
-  deleteVideo,
+  deleteVideo: filterUnauthorized(deleteVideo),
   search,
-  getEdit,
-  postEdit,
+  getEdit: filterUnauthorized(getEdit),
+  postEdit: filterUnauthorized(postEdit),
   watch,
   home,
 };

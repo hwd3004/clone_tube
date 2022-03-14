@@ -41,8 +41,4 @@ instance.interceptors.request.use(
   }
 );
 
-createApp(App)
-  .use(store)
-  .use(router)
-  .component("QuillEditor", QuillEditor)
-  .mount("#app");
+createApp(App).use(store).use(router).component("QuillEditor", QuillEditor).mount("#app");

@@ -3,6 +3,7 @@ import User from "../models/Users";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { filterPublicOnly, filterUnauthorized, avatarFileUpload } from "../util";
+import Video from "../models/Videos";
 
 const getJoin = (req: Request, res: Response) => {
   res.send({ pageTitle: "Join" });
@@ -96,7 +97,7 @@ const logout = async (req: Request, res: Response) => {
 const see = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const user = await User.findById(id);
+  const user = await User.findById(id).populate("videos");
 
   if (!user) {
     return res.send({
@@ -104,6 +105,9 @@ const see = async (req: Request, res: Response) => {
       errorMsg: "User not found.",
     });
   }
+
+  // const videos = await Video.find({ owner: user._id });
+  console.log(user);
 
   return res.send({
     status: 200,

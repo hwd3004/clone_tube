@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   location: String,
   avatarUrl: String,
+  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
 });
 
 const User = mongoose.model("User", userSchema);

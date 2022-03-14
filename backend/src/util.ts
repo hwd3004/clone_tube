@@ -130,7 +130,7 @@ export const videoFileUpload = async (req_files: fileUpload.FileArray, id: any, 
 
     file.mv(`${uploadPath}/${file.name}`);
 
-    const fileUrl = `/uploads/video/${id}/${title}/${dateNow}`;
+    const fileUrl = `/uploads/video/${id}/${title}/${dateNow}/${file.name}`;
 
     return {
       status: true,

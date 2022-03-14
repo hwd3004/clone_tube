@@ -9,6 +9,7 @@ import Join from "../views/Join.vue";
 import Login from "../views/Login.vue";
 import EditProfile from "../views/EditProfile.vue";
 import Change_Password from "../views/Change_Password.vue";
+import See from "../views/See.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -46,6 +47,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/users/change_password",
     component: Change_Password,
+  },
+  {
+    path: "/users/:id",
+    component: See,
   },
   {
     path: "/:pathMatch(.*)",
