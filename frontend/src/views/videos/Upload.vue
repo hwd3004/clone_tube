@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div>
+      <button @click="temp">start recording</button>
+    </div>
     <form id="form" v-on:submit.prevent="handleSubmit">
       <input
         type="file"
@@ -43,6 +46,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from "@vue/runtime-core";
 import { useStore } from "vuex";
+import "regenerator-runtime"
 
 export default defineComponent({
   setup() {
@@ -65,7 +69,16 @@ export default defineComponent({
       form.video = e.target.files[0];
     };
 
-    return { form, handleSubmit, changeVideo };
+    const temp = async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+
+      console.log(stream);
+    };
+
+    return { form, handleSubmit, changeVideo, temp };
   },
 });
 </script>

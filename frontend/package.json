@@ -11,12 +11,17 @@
     "@vueup/vue-quill": "^1.0.0-beta.8",
     "axios": "^0.26.0",
     "core-js": "^3.6.5",
+    "i": "^0.3.7",
+    "npm": "^8.5.4",
+    "regenerator-runtime": "^0.13.9",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/regenerator-runtime": "^0.13.1",
+    "@types/sass": "^1.43.1",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
     "@vue/cli-plugin-babel": "~4.5.15",
