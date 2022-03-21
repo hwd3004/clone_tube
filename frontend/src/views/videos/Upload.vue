@@ -2,6 +2,7 @@
   <div>
     <div>
       <button id="startBtn">start recording</button>
+      <br />
       <video id="preview"></video>
     </div>
     <form id="form" v-on:submit.prevent="handleSubmit">
@@ -74,30 +75,32 @@ export default defineComponent({
       const startBtn: HTMLButtonElement = document.querySelector("#startBtn");
       const video: HTMLVideoElement = document.querySelector("#preview");
 
-      let handle = false;
+      let stream: any;
 
-      let stream;
+      const handleStop = () => {
+        startBtn.innerText = "Start Recording";
+        startBtn.removeEventListener("click", handleStop);
+        startBtn.addEventListener("click", handleStart);
+      };
+
       const handleStart = async () => {
-        if (!handle) {
-          handle = true;
-          startBtn.innerText = "Stop Recording";
-          stream = await navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: true,
-          });
-          video.srcObject = stream;
-          video.play();
+        startBtn.innerText = "Stop Recording";
+        startBtn.removeEventListener("click", handleStart);
+        startBtn.addEventListener("click", handleStop);
 
-          setInterval(() => {
-            console.log(video.srcObject);
-          }, 1000);
-        } else {
-          handle = false;
-          startBtn.innerText = "Start Recording";
-          stream = null;
-          video.pause();
-          console.log(video.srcObject);
-        }
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: true,
+        });
+        video.srcObject = stream;
+        video.play();
+
+        // https://stackoverflow.com/questions/40051818/how-can-i-use-a-mediarecorder-object-in-an-angular2-application
+        const recorder = new MediaRecorder(stream);
+
+        recorder.ondataavailable = (e: any) => {
+          console.log(e);
+        };
       };
 
       startBtn.addEventListener("click", handleStart);
@@ -107,3 +110,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+#preview {
+  width: 300px;
+}
+</style>
