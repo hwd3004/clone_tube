@@ -71,37 +71,60 @@ export default defineComponent({
       form.video = e.target.files[0];
     };
 
-    onMounted(async () => {
+    onMounted(() => {
       const startBtn: HTMLButtonElement = document.querySelector("#startBtn");
       const video: HTMLVideoElement = document.querySelector("#preview");
 
-      let stream: any;
+      let stream: MediaStream;
+      let recorder: MediaRecorder;
+      let videoFile: string;
 
-      const handleStop = () => {
-        startBtn.innerText = "Start Recording";
-        startBtn.removeEventListener("click", handleStop);
-        startBtn.addEventListener("click", handleStart);
+      const handleDownload = () => {
+        const a = document.createElement("a");
+        a.href = videoFile;
+        a.download = "MyRecording.webm";
+        document.body.appendChild(a);
+        a.click();
       };
 
-      const handleStart = async () => {
+      const handleStop = () => {
+        startBtn.innerText = "Download Recording";
+        startBtn.removeEventListener("click", handleStop);
+        startBtn.addEventListener("click", handleDownload);
+
+        recorder.stop();
+      };
+
+      const handleStart = () => {
         startBtn.innerText = "Stop Recording";
         startBtn.removeEventListener("click", handleStart);
         startBtn.addEventListener("click", handleStop);
 
+        // 타입스크립트에서 MediaRecorder 사용하기
+        // https://stackoverflow.com/questions/40051818/how-can-i-use-a-mediarecorder-object-in-an-angular2-application
+        recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+
+        recorder.ondataavailable = (event: any) => {
+          videoFile = URL.createObjectURL(event.data);
+          video.srcObject = null;
+          video.src = videoFile;
+          video.loop = true;
+          video.play();
+        };
+
+        recorder.start();
+      };
+
+      const init = async () => {
         stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
+          audio: false,
           video: true,
         });
         video.srcObject = stream;
         video.play();
-
-        // https://stackoverflow.com/questions/40051818/how-can-i-use-a-mediarecorder-object-in-an-angular2-application
-        const recorder = new MediaRecorder(stream);
-
-        recorder.ondataavailable = (e: any) => {
-          console.log(e);
-        };
       };
+
+      init();
 
       startBtn.addEventListener("click", handleStart);
     });
