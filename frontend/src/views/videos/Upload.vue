@@ -106,6 +106,7 @@ export default defineComponent({
 
         recorder.ondataavailable = (event: any) => {
           videoFile = URL.createObjectURL(event.data);
+          console.log(videoFile);
           video.srcObject = null;
           video.src = videoFile;
           video.loop = true;
