@@ -21,3 +21,5 @@ ffmpeg.wasm은 비디오를 변환하기 위해 사용자의 컴퓨터를 사용
 ---
 
 webm을 지원하지 않는 기기나 브라우저가 있기 때문에 mp4로 변환
+
+npm install @ffmpeg/ffmpeg @ffmpeg/core
