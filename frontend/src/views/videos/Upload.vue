@@ -81,7 +81,10 @@ export default defineComponent({
       let videoFile: string;
 
       const handleDownload = async () => {
-        const ffmpeg = createFFmpeg({ log: true });
+        const ffmpeg = createFFmpeg({
+          corePath: "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js",
+          log: true,
+        });
 
         // 사용자가 자바스크립트가 아닌, 다른 소프트웨어를 설치해서 사용하는 것이므로 기다려주어야함
         // 웹어셈블리를 사용하기 때문에 브라우저라는 한계를 벗어날 수 있음
@@ -93,6 +96,9 @@ export default defineComponent({
         // 메모리에 저장된 파일을 input으로 받게 한 후, output으로 반환
         // -r 60은 영상을 초당 60 프레임으로 인코딩해주는 명령어
         await ffmpeg.run("-i", "recording.webm", "-r", "60", "output.mp4");
+
+        const mp4File = ffmpeg.FS("readFile", "output.mp4");
+        console.log(mp4File);
         //
 
         const a = document.createElement("a");

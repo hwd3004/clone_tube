@@ -2,3 +2,9 @@
 // module.exports = {
 //     lintOnSave: false
 // }
+
+module.exports = {
+    devServer: {
+        proxy: 'https://unpkg.com/'
+    }
+}
