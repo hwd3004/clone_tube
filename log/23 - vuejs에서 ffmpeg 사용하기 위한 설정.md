@@ -1,8 +1,4 @@
-// https://livedata.tistory.com/177
-// module.exports = {
-//     lintOnSave: false
-// }
-
+```javascript
 module.exports = {
     devServer: {
         proxy:"https://unpkg.com/",
@@ -12,3 +8,6 @@ module.exports = {
         },
     }
 }
+```
+
+https://nomadcoders.co/wetube/lectures/2776
