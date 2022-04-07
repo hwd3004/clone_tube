@@ -4,9 +4,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
-  <i class="fa fa-camera"></i>
-  <i class="fa fa-youtube"></i>
-    <font-awesome-icon icon="fa-brands fa-youtube" />
+    <i class="fas fa-camera"></i>
+    <i class="fas fa-youtube"></i>
 
     <div id="nav">
       <router-link to="/">Home</router-link>
