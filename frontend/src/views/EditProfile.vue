@@ -4,7 +4,7 @@
 
     <form id="form" v-on:submit.prevent="handleSubmit" autocomplete="off">
       <div v-if="form.avatarUrl">
-        <img id="avatar" :src="form.avatarUrl" />
+        <img id="avatar" :src="form.avatarUrl" crossorigin="anonymous" />
       </div>
       <label>
         <span>name - </span>

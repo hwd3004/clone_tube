@@ -5,7 +5,9 @@ import store from "./store";
 import axios, { AxiosRequestConfig } from "axios";
 
 // https://vueup.github.io/vue-quill/guide/themes.html
-import { QuillEditor } from "@vueup/vue-quill";
+// import { QuillEditor } from "@vueup/vue-quill";
+const QuillEditor = require("@vueup/vue-quill");
+
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { getLsUser, getLsLoggedIn } from "./store/modules/user";
 

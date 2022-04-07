@@ -83,7 +83,9 @@ export const avatarFileUpload = async (req_files: fileUpload.FileArray, id: any)
 
     // 이전 파일 삭제
     unlink(`${process.cwd()}/${userObj.avatarUrl}`, (error: any) => {
-      console.log(error);
+      if (error) {
+        console.log(error);
+      }
     });
 
     return {
