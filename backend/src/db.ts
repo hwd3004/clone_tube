@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
-mongoose.connect("mongodb://127.0.0.1:27017/clone_tube");
+const local = false;
+let address;
+
+local ? (address = "127.0.0.1") : (address = "172.18.0.2");
+
+mongoose.connect(`mongodb://${address}:27017/clone_tube`);
 
 const db = mongoose.connection;
 
