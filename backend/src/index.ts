@@ -30,8 +30,8 @@ const app = express();
 
 app.use(morgan("dev"));
 
-// app.use(cors({ origin: ["http://localhost:8000"], credentials: true }));
-app.use(cors());
+app.use(cors({ origin: ["http://localhost:8000"], credentials: true }));
+// app.use(cors());
 
 // https://www.npmjs.com/package/express-fileupload
 app.use(fileUpload());
@@ -56,10 +56,10 @@ app.use((req, res, next) => {
   // res.locals.loggedIn = req.session.loggedIn;
   // res.locals.user = req.session.user;
   // res.locals.siteName = "clone_tube";
-  res.header("Cross-Origin-Embedder-Policy", "require-corp");
-  res.header("Cross-Origin-Opener-Policy", "same-origin");
-  res.header("cross-origin-resource-Policy", "cross-origin");
-  res.header("Access-Control-Allow-Credentials", "true");
+  // res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  // res.header("Cross-Origin-Opener-Policy", "same-origin");
+  // res.header("cross-origin-resource-Policy", "cross-origin");
+  // res.header("Access-Control-Allow-Credentials", "true");
 
   next();
 });
