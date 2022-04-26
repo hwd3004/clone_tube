@@ -31,7 +31,6 @@
         video.owner.name
       }}</router-link>
     </p>
-    <p>{{ video.owner._id }}</p>
 
     <div v-if="currentUserId == video.owner._id">
       <router-link v-bind:to="`/videos/${video._id}/edit`"
