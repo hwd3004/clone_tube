@@ -77,7 +77,7 @@ export default defineComponent({
       form.video = e.target.files[0];
     };
 
-    let stream: MediaStream;
+    // let stream: MediaStream;
 
     // onMounted(() => {
     //   const actionBtn: HTMLButtonElement = document.querySelector("#actionBtn");
@@ -220,15 +220,15 @@ export default defineComponent({
     //   actionBtn.addEventListener("click", handleStart);
     // });
 
-    onUnmounted(() => {
-      // 카메라 끄기
-      const tracks = stream.getTracks();
-      tracks.forEach((track) => {
-        track.stop();
-      });
+    // onUnmounted(() => {
+    //   // 카메라 끄기
+    //   const tracks = stream.getTracks();
+    //   tracks.forEach((track) => {
+    //     track.stop();
+    //   });
 
-      stream = null;
-    });
+    //   stream = null;
+    // });
 
     return { form, handleSubmit, changeVideo };
   },
