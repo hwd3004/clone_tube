@@ -41,7 +41,13 @@ sudo docker inspect clone_tube-network
 ```
 
 ```
+sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i -g nodemon"
+
+sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i"
+
 sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm start"
+
+sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i"
 
 sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm run serve"
 ```
