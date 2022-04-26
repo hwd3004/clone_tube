@@ -79,10 +79,10 @@ const logout = async (req: Request, res: Response) => {
     let loggedin: any = req.headers.loggedin;
     loggedin = JSON.parse(loggedin);
 
-    console.log(user);
-    console.log(loggedin);
+    // console.log(user);
+    // console.log(loggedin);
 
-    console.log(req.session);
+    // console.log(req.session);
 
     res.send({ status: 200 });
   } catch (error) {
@@ -107,7 +107,7 @@ const see = async (req: Request, res: Response) => {
   }
 
   // const videos = await Video.find({ owner: user._id });
-  console.log(user);
+  // console.log(user);
 
   return res.send({
     status: 200,

@@ -170,14 +170,8 @@ const deleteVideo = async (req: Request, res: Response, next: NextFunction, payl
     // });
 
     const fileUrl: string = video.fileUrl;
-    console.log(fileUrl);
 
     const fileUrlStringArray = fileUrl.split("/");
-    console.log(fileUrlStringArray);
-
-    console.log(fileUrlStringArray[0]);
-    console.log(fileUrlStringArray[1]);
-    console.log(fileUrlStringArray[2]);
 
     rmdirSync(
       `${process.cwd()}/${fileUrlStringArray[1]}/${fileUrlStringArray[2]}/${fileUrlStringArray[3]}/${
