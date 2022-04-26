@@ -11,7 +11,12 @@ const QuillEditor = require("@vueup/vue-quill");
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { getLsUser, getLsLoggedIn } from "./store/modules/user";
 
-export const baseURL = "http://localhost:4000";
+const local = false;
+let address;
+
+local ? (address = "http://172.18.0.3:4000") : (address = "http://localhost:4000");
+
+export const baseURL = address;
 
 export const instance = axios.create({
   baseURL,
