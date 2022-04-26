@@ -11,10 +11,10 @@ const QuillEditor = require("@vueup/vue-quill");
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { getLsUser, getLsLoggedIn } from "./store/modules/user";
 
-const local = true;
+const local = false;
 let address;
 
-local ? (address = "http://localhost:4000") : (address = "http://172.18.0.3:4000");
+local ? (address = "http://localhost:4000") : (address = "http://172.18.0.3");
 
 export const baseURL = address;
 
