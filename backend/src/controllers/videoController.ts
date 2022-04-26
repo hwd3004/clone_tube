@@ -3,6 +3,7 @@ import Video from "../models/Videos";
 import { filterUnauthorized, videoFileUpload } from "../util";
 import User from "../models/Users";
 import jwt from "jsonwebtoken";
+import { unlink, rm, rmdirSync } from "fs";
 
 const home = async (req: Request, res: Response) => {
   // https://mongoosejs.com/docs/api.html#query_Query-sort
@@ -150,8 +151,43 @@ const deleteVideo = async (req: Request, res: Response, next: NextFunction, payl
 
     const video = await Video.findById(id);
 
-    if (video.owner.toString() != payload.id) {
+    const owner = video.owner.toString();
+    const currentUserId = payload.id;
+
+    if (owner != currentUserId) {
       return res.send({ status: 403, errorMsg: "you are not owner." });
+    }
+
+    let errorState = false;
+
+    // console.log(process.cwd());
+    // console.log(video.fileUrl);
+
+    // unlink(`${process.cwd()}/${video.fileUrl}`, (error: any) => {
+    //   if (error) {
+    //     errorState = true;
+    //   }
+    // });
+
+    const fileUrl: string = video.fileUrl;
+    console.log(fileUrl);
+
+    const fileUrlStringArray = fileUrl.split("/");
+    console.log(fileUrlStringArray);
+
+    console.log(fileUrlStringArray[0]);
+    console.log(fileUrlStringArray[1]);
+    console.log(fileUrlStringArray[2]);
+
+    rmdirSync(
+      `${process.cwd()}/${fileUrlStringArray[1]}/${fileUrlStringArray[2]}/${fileUrlStringArray[3]}/${
+        fileUrlStringArray[4]
+      }`,
+      { recursive: true }
+    );
+
+    if (errorState) {
+      return res.send({ status: 400, errorMsg: "Cannot Delete Video." });
     }
 
     await Video.findByIdAndDelete(id);

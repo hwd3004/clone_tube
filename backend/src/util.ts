@@ -124,7 +124,7 @@ export const videoFileUpload = async (req_files: fileUpload.FileArray, id: any, 
 
     const dateNow = Date.now();
 
-    const uploadPath = `${process.cwd()}/uploads/video/${id}/${title}/${dateNow}`;
+    const uploadPath = `${process.cwd()}/uploads/video/${id}/${dateNow}/${title}`;
 
     if (!existsSync(uploadPath)) {
       mkdirSync(uploadPath, { recursive: true });
@@ -132,7 +132,7 @@ export const videoFileUpload = async (req_files: fileUpload.FileArray, id: any, 
 
     file.mv(`${uploadPath}/${file.name}`);
 
-    const fileUrl = `/uploads/video/${id}/${title}/${dateNow}/${file.name}`;
+    const fileUrl = `/uploads/video/${id}/${dateNow}/${title}/${file.name}`;
 
     return {
       status: true,

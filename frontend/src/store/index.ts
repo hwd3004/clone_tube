@@ -20,6 +20,10 @@ export default createStore({
     ],
     loading: false,
     currentUserId: null,
+    uploadingState: {
+      percentage: "",
+      size: "",
+    },
   },
   getters: {
     getVideo: (state) => {
@@ -30,6 +34,9 @@ export default createStore({
     },
     getCurrentUserId: (state) => {
       return state.currentUserId;
+    },
+    getUploadingState: (state) => {
+      return state.uploadingState;
     },
   },
   mutations: {
@@ -51,6 +58,17 @@ export default createStore({
       }
 
       state.loading = false;
+    },
+    setUploadingState: function (state, payload) {
+      const { percentage, size } = payload;
+
+      state.uploadingState.percentage = percentage;
+      state.uploadingState.size = size;
+
+      if (percentage == "100%/100%") {
+        state.uploadingState.percentage = "";
+        state.uploadingState.size = "";
+      }
     },
   },
   actions: {
@@ -96,7 +114,18 @@ export default createStore({
         formdata.append(key, payload[key]);
       }
 
-      const res = await instance.post("/videos/upload", formdata);
+      const res = await instance.post("/videos/upload", formdata, {
+        onUploadProgress: (progressEvent: ProgressEvent) => {
+          // https://hagohobby.tistory.com/22?category=896254
+          const percentage = (progressEvent.loaded / progressEvent.total) * 100;
+          const percentCompleted = Math.round(percentage);
+
+          context.commit("setUploadingState", {
+            percentage: `${percentCompleted}%/100%`,
+            size: `${progressEvent.loaded / 1000000}MB/${progressEvent.total / 1000000}MB`,
+          });
+        },
+      });
 
       const { status, errorMsg }: { status: number; errorMsg: string } = res.data;
 

@@ -42,11 +42,17 @@
       <br />
       <input type="submit" value="upload" />
     </form>
+    <div>
+      <br />
+      <p>{{ uploadingState.percentage }}</p>
+      <p>{{ uploadingState.size }}</p>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import {
+  computed,
   defineComponent,
   onMounted,
   onUnmounted,
@@ -71,6 +77,10 @@ export default defineComponent({
     const handleSubmit = async () => {
       store.dispatch("uploadVideo", form);
     };
+
+    const uploadingState = computed(() => {
+      return store.getters["getUploadingState"];
+    });
 
     // eslint-disable-next-line
     const changeVideo = (e: any) => {
@@ -230,7 +240,7 @@ export default defineComponent({
     //   stream = null;
     // });
 
-    return { form, handleSubmit, changeVideo };
+    return { form, handleSubmit, changeVideo, uploadingState };
   },
 });
 </script>
