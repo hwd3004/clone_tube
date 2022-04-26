@@ -40,4 +40,14 @@ sudo docker inspect clone_tube-network
 같은 네트워크에 속해있는 컨테이너들의 ip 확인
 ```
 
+```
+sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm start"
+
+sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm run serve"
+```
+
 https://github.com/hwd3004/clone_tube.git
+
+---
+
+npm -i -g serve
