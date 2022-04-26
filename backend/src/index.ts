@@ -56,18 +56,22 @@ declare module "express-session" {
   }
 }
 
-// app.use((req, res, next) => {
-//   res.locals.loggedIn = req.session.loggedIn;
-//   res.locals.user = req.session.user;
-//   res.locals.siteName = "clone_tube";
+app.use((req, res, next) => {
+  // res.locals.loggedIn = req.session.loggedIn;
+  // res.locals.user = req.session.user;
+  // res.locals.siteName = "clone_tube";
+  // res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  // res.header("Cross-Origin-Opener-Policy", "same-origin");
+  // res.header("cross-origin-resource-Policy", "cross-origin");
+  // res.header("Access-Control-Allow-Credentials", "true");
 
-//   next();
-// });
+  next();
+});
 
 app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
 
-const handleListening = () => console.log(`✅ Server listenting on port http://localhost:${PORT} 🚀`);
+const handleListening = () => console.log(`Success : Server on http://localhost:${PORT}`);
 
 app.listen(PORT, handleListening);
