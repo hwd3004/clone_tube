@@ -20,7 +20,7 @@
         <span> | </span>
         <router-link to="/users/edit">Edit Profile</router-link>
         <span> | </span>
-        <span id="logout" @click="logout">Log Out</span>
+        <span id="logout" @click="logout"><button>Log Out</button></span>
       </span>
       <span> | </span>
       <router-link to="/dummy">Dummy</router-link>
