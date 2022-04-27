@@ -14,7 +14,7 @@ import { getLsUser, getLsLoggedIn } from "./store/modules/user";
 const local = true;
 let address;
 
-local ? (address = "http://localhost:4000") : (address = "http://172.18.0.3");
+local ? (address = "http://localhost:4000/api") : (address = "/api");
 
 export const baseURL = address;
 

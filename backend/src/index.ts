@@ -30,8 +30,8 @@ const app = express();
 
 app.use(morgan("dev"));
 
-app.use(cors({ origin: ["http://localhost:8000"], credentials: true }));
-// app.use(cors());
+// app.use(cors({ origin: ["http://localhost:8000"], credentials: true }));
+app.use(cors());
 
 // https://www.npmjs.com/package/express-fileupload
 app.use(fileUpload());
@@ -40,7 +40,8 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/uploads", express.static("uploads"));
+// app.use("/uploads", express.static("uploads"));
+app.use("/api/uploads", express.static("uploads"));
 
 app.use(compression());
 
@@ -64,9 +65,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", rootRouter);
-app.use("/users", userRouter);
-app.use("/videos", videoRouter);
+app.use("/api", rootRouter);
+app.use("/api/users", userRouter);
+app.use("/api/videos", videoRouter);
 
 const handleListening = () => console.log(`Success : Server on http://localhost:${PORT}`);
 
