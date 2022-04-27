@@ -92,7 +92,11 @@ sudo docker exec -it nginx-container bash
 
 default.conf 위치
 cd /etc/nginx/conf.d
+```
 
+<img src="./capture 2022-04-27 174238.png">
+
+```
 sudo docker restart nginx-container
 ```
 
@@ -117,3 +121,13 @@ sudo docker exec -itd web-clone_tube sh -c "cd /clone_tube/frontend && npm run s
 <hr/>
 
 https://stackoverflow.com/questions/67598005/logs-in-the-console-stuck-saying-120659-pm-file-change-detected-starting-in
+
+/backend/tsconfig/json
+
+```json
+{
+  "exclude": ["uploads"],
+  "include": ["src"]
+  // ...
+}
+```
