@@ -35,7 +35,7 @@ sudo docker run \
 ```
 cd /
 
-git clone https://github.com/hwd3004/clone_tube.git
+sudo git clone https://github.com/hwd3004/clone_tube.git
 ```
 
 ```
@@ -60,12 +60,16 @@ sudo docker inspect clone_tube-network
 <hr/>
 
 ```
+백엔드 실행
 sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i -g nodemon"
 
 sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i"
 
 sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm start"
+```
 
+```
+프론트 실행
 sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i"
 
 sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm run build"
@@ -96,30 +100,8 @@ sudo docker exec -it nginx-container bash
 
 default.conf 위치
 cd /etc/nginx/conf.d
-```
 
-<img src="./capture 2022-04-27 174238.png">
-
-```
 sudo docker restart nginx-container
-```
-
-<hr/>
-
-```
-sudo docker run -d -it --name web-clone_tube \
-    -v /clone_tube:/clone_tube -p 4000:4000 \
-    --network clone_tube-network node:16.14.2
-
-sudo docker exec -itd web-clone_tube sh -c "cd /clone_tube/backend && npm i -g nodemon"
-
-sudo docker exec -itd web-clone_tube sh -c "cd /clone_tube/backend && npm i"
-
-sudo docker exec -itd web-clone_tube sh -c "cd /clone_tube/frontend && npm i"
-
-sudo docker exec -itd web-clone_tube sh -c "cd /clone_tube/backend && npm start"
-
-sudo docker exec -itd web-clone_tube sh -c "cd /clone_tube/frontend && npm run serve"
 ```
 
 <hr/>
@@ -156,4 +138,10 @@ DB복구
 sudo docker cp mongodb-container:/data/db /data/clone_tube
 
 sudo docker cp /data/clone_tube/db mongodb-container:/data
+```
+
+```
+mkdir nginx_conf_copy
+
+sudo docker cp nginx-container:/etc/nginx/conf.d/default.conf /nginx_conf_copy
 ```
