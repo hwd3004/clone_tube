@@ -46,7 +46,7 @@ sudo docker run -d -it --name backend-clone_tube \
 
 프론트엔드 컨테이너 생성
 sudo docker run -d -it --name frontend-clone_tube \
-    -v /clone_tube/frontend:/clone_tube/frontend -p 8000:8000 \
+    -v /clone_tube/frontend:/clone_tube/frontend -p 3000:3000 \
     --network clone_tube-network node:16.14.2
 ```
 
@@ -69,6 +69,10 @@ sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm st
 sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i"
 
 sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm run build"
+
+sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i -g serve"
+
+sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && serve -s dist"
 ```
 
 <hr/>
