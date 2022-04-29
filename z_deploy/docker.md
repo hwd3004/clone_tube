@@ -106,32 +106,6 @@ sudo docker restart nginx-container
 
 <hr/>
 
-https://stackoverflow.com/questions/67598005/logs-in-the-console-stuck-saying-120659-pm-file-change-detected-starting-in
-
-/backend/tsconfig/json
-
-```json
-{
-  "exclude": ["uploads"],
-  "include": ["src"]
-  // ...
-}
-```
-
-<hr/>
-
-https://t-okk.tistory.com/154
-
-https://cornswrold.tistory.com/439
-
-https://cli.vuejs.org/guide/deployment.html
-
-https://velog.io/@blackb0x/%EC%96%B4%ED%94%8C-%EB%B0%B0%ED%8F%AC%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EB%B6%80%EB%B6%84
-
-https://81shinez.tistory.com/7
-
-<hr/>
-
 ```
 DB복구
 
