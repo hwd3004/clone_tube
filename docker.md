@@ -18,7 +18,7 @@ sudo docker network create --driver bridge clone_tube-network
 MongoDB 컨테이너 생성
 sudo docker run \
     --name mongodb-container \
-    -v /data/clone_tube:/var/lib/mongodb -d -p 27017:27017 \
+    -d -p 27017:27017 \
     --network clone_tube-network \
     mongo
 
@@ -143,3 +143,13 @@ https://cli.vuejs.org/guide/deployment.html
 https://velog.io/@blackb0x/%EC%96%B4%ED%94%8C-%EB%B0%B0%ED%8F%AC%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EB%B6%80%EB%B6%84
 
 https://81shinez.tistory.com/7
+
+<hr/>
+
+```
+DB복구
+
+sudo docker cp mongodb-container:/data/db /data/clone_tube
+
+sudo docker cp /data/clone_tube/db mongodb-container:/data
+```
