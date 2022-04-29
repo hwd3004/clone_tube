@@ -1,8 +1,8 @@
 <template>
   <div>
     <div id="videoContainer">
-      <!-- <video v-bind:src="`http://localhost:4000${video.fileUrl}`" crossorigin="true" controls></video> -->
-      <video v-bind:src="`/api${video.fileUrl}`" crossorigin="true" controls></video>
+      <video v-bind:src="`http://localhost:4000/api${video.fileUrl}`" crossorigin="true" controls></video>
+      <!-- <video v-bind:src="`/api${video.fileUrl}`" crossorigin="true" controls></video> -->
       <div id="videoControls">
         <button id="play">Play</button>
         <button id="mute">Mute</button>
