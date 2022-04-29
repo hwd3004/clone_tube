@@ -12,6 +12,10 @@ https://stackoverflow.com/questions/67598005/logs-in-the-console-stuck-saying-12
 
 <hr/>
 
+https://elfinlas.github.io/2019/02/11/docker-on-mongo/ - docker에서 mongodb 설치
+
+<hr/>
+
 nginx default.conf
 
 ```conf
