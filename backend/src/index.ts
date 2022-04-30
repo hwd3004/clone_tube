@@ -12,6 +12,7 @@ import "./models/Videos";
 import "./models/Users";
 import compression from "compression";
 import fileUpload from "express-fileupload";
+import requestIp from "request-ip";
 
 const PORT = process.env.PORT;
 
@@ -61,6 +62,10 @@ app.use((req, res, next) => {
   // res.header("Cross-Origin-Opener-Policy", "same-origin");
   // res.header("cross-origin-resource-Policy", "cross-origin");
   // res.header("Access-Control-Allow-Credentials", "true");
+
+  // const clientIp = requestIp.getClientIp(req);
+  // console.log(clientIp);
+  // docker nginx 사용시 nginx ip가 뜸
 
   next();
 });
