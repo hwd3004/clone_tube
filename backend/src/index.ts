@@ -31,7 +31,7 @@ const app = express();
 app.use(morgan("dev"));
 
 // app.use(cors({ origin: ["http://localhost:8000"], credentials: true }));
-app.use(cors());
+// app.use(cors());
 
 // https://www.npmjs.com/package/express-fileupload
 app.use(fileUpload());

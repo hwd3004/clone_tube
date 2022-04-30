@@ -92,3 +92,15 @@ server {
     #}
 }
 ```
+
+<hr/>
+
+도커 볼륨
+
+https://youtu.be/OrQLrqQm4M0
+
+https://velog.io/@1-blue/docker-volume-%EC%82%AC%EC%9A%A9%EB%B2%95
+
+https://palbok.tistory.com/36
+
+https://docs.docker.com/storage/volumes/

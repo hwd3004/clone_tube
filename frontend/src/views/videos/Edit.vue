@@ -57,12 +57,12 @@ export default defineComponent({
 
     store.dispatch("fetchVideo", { url });
 
-    const video = computed(() => {
+    const video = computed(function () {
       const data = store.getters["getVideo"];
       return data;
     });
 
-    onMounted(() => {
+    onMounted(function () {
       form.title = video.value.title;
 
       form.hashtags = video.value.hashtags;
