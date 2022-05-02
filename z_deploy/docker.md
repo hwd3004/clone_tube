@@ -125,10 +125,14 @@ sudo docker restart nginx-container
 ```
 DB복구
 
-sudo docker cp mongodb-container:/data/db /data/clone_tube
+docker cp mongodb-container:/data/db /data/clone_tube
 
-sudo docker cp /data/clone_tube/db mongodb-container:/data
+docker exec -itd mongodb-container sh -c "cd /data/db && rm -rf *"
 
+docker cp /data/clone_tube/db mongodb-container:/data
+```
+
+```
 cp -r /data/clone_tube/db/* /var/lib/docker/volumes/mongodb-volume/_data
 ```
 
