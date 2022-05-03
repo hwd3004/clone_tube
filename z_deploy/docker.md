@@ -28,17 +28,9 @@ docker volume prune
 
 ```
 MongoDB 컨테이너 생성
-sudo docker run \
-    --name mongodb-container \
-    -d -p 27017:27017 \
-    -v mongodb-volume:/data/db \
-    --network clone_tube-network \
-    mongo
-
-docker run --name mongodb-container -d -p 27017:27017 -v mongodb-volume:/data/db --network clone_tube-network mongo
-
 docker run --name mongodb-container -d -p 27017:27017 \
     --network clone_tube-network \
+    -v mongodb-volume:/data/db \
     -v /clone_tube/z_deploy/mongod.conf:/etc/mongod.conf \
     mongo --config /etc/mongod.conf --wiredTigerCacheSizeGB 1
 ```
@@ -76,7 +68,6 @@ docker inspect clone_tube-network
 
 ```
 백엔드 실행
-docker exec -it backend-clone_tube bash
 
 sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i -g nodemon"
 
@@ -88,7 +79,6 @@ docker exec -it backend-clone_tube sh -c "cd /clone_tube/backend && npm start"
 
 ```
 프론트 실행
-docker exec -it frontend-clone_tube bash
 
 sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i"
 
@@ -118,8 +108,6 @@ docker run -d -it --name nginx-container -p 80:80 -v C:\workspace\clone_tube\z_d
 ```
 
 ```
-sudo docker exec -it nginx-container bash
-
 default.conf 위치
 cd /etc/nginx/conf.d
 
@@ -150,4 +138,14 @@ sudo docker cp nginx-container:/etc/nginx/conf.d/default.conf /nginx_conf_copy
 
 ```
 윈도우에서 개발 후 도커로 테스트 시 주의사항 - node_modules를 삭제하고 도커 컨테이너 안에서 npm i
+```
+
+```
+docker exec -it nginx-container bash
+
+docker exec -it backend-clone_tube bash
+
+docker exec -it frontend-clone_tube bash
+
+docker exec -it mongodb-container bash
 ```

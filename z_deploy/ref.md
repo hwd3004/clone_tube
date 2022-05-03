@@ -16,6 +16,8 @@ https://elfinlas.github.io/2019/02/11/docker-on-mongo/ - docker에서 mongodb �
 
 https://bearfoon.tistory.com/entry/MongoDB를-docker에서-돌릴-때-발생가능한-문제점
 
+https://somjang.tistory.com/entry/MongoDB-shutting-down-with-code100-원인-및-해결-방법?category=388312
+
 <hr/>
 
 도커 볼륨
