@@ -83,6 +83,7 @@ sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i 
 sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i"
 
 docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm start"
+docker exec -it backend-clone_tube sh -c "cd /clone_tube/backend && npm start"
 ```
 
 ```
