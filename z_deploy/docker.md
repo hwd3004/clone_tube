@@ -36,6 +36,11 @@ sudo docker run \
     mongo
 
 docker run --name mongodb-container -d -p 27017:27017 -v mongodb-volume:/data/db --network clone_tube-network mongo
+
+docker run --name mongodb-container -d -p 27017:27017 \
+    --network clone_tube-network \
+    -v /clone_tube/z_deploy/mongod.conf:/etc/mongod.conf \
+    mongo --config /etc/mongod.conf --wiredTigerCacheSizeGB 1
 ```
 
 ```
