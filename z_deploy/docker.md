@@ -110,7 +110,7 @@ nginx html 위치
 
 sudo docker run -d -it --name nginx-container \
     -p 80:80 \
-    -v /clone_tube/frontend/dist:/usr/share/nginx/html \
+    -v /clone_tube/z_deploy/default.conf:/etc/nginx/conf.d/default.conf \
     --network clone_tube-network nginx
 
 docker run -d -it --name nginx-container -p 80:80 -v C:\workspace\clone_tube\z_deploy\default.conf:/etc/nginx/conf.d/default.conf --network clone_tube-network nginx
