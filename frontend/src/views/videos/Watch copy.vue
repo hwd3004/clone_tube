@@ -2,15 +2,11 @@
   <div>
     <div id="videoContainer">
       <video
-        v-bind:src="`http://localhost:4000/api${getVideo.fileUrl}`"
+        v-bind:src="`http://localhost:4000/api${video.fileUrl}`"
         crossorigin="true"
         controls
       ></video>
-      <!-- <video
-        v-bind:src="`/api${getVideo.fileUrl}`"
-        crossorigin="true"
-        controls
-      ></video> -->
+      <!-- <video v-bind:src="`/api${video.fileUrl}`" crossorigin="true" controls></video> -->
       <div id="videoControls">
         <button id="play">Play</button>
         <button id="mute">Mute</button>
@@ -29,20 +25,20 @@
       </div>
     </div>
 
-    <p>{{ getVideo.title }}</p>
-    <p v-html="getVideo.description"></p>
-    <p>{{ getVideo.hashtags }}</p>
-    <p>{{ getVideo.meta }}</p>
-    <p>{{ getVideo.createdAt }}</p>
-    <p v-if="getVideo.owner">
+    <p>{{ video.title }}</p>
+    <p v-html="video.description"></p>
+    <p>{{ video.hashtags }}</p>
+    <p>{{ video.meta }}</p>
+    <p>{{ video.createdAt }}</p>
+    <p>
       uploaded by
-      <router-link v-bind:to="`/users/${getVideo.owner._id}`">{{
-        getVideo.owner.name
+      <router-link v-bind:to="`/users/${video.owner._id}`">{{
+        video.owner.name
       }}</router-link>
     </p>
 
-    <div v-if="getVideo.owner && currentUserId == getVideo.owner._id">
-      <router-link v-bind:to="`/videos/${getVideo._id}/edit`"
+    <div v-if="currentUserId == video.owner._id">
+      <router-link v-bind:to="`/videos/${video._id}/edit`"
         ><button>Edit</button></router-link
       >
       &nbsp;
@@ -52,36 +48,32 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  ref,
-  toRef,
-} from "@vue/runtime-core";
+import { instance } from "../../main";
+import { defineComponent, onMounted, ref } from "@vue/runtime-core";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 export default defineComponent({
   setup() {
+    const video = ref({});
+    const currentUserId = ref("");
+
     const router = useRouter();
     const store = useStore();
 
     const url = location.pathname;
 
-    store.dispatch("fetchVideo", { url });
+    const init = async () => {
+      const { data } = await instance.get(url);
 
-    const getVideo = computed(() => {
-      const data = store.getters["getVideo"];
+      const initVideo = data.video;
+      initVideo.hashtags = initVideo.hashtags.join();
+      video.value = initVideo;
 
-      return data;
-    });
+      currentUserId.value = data.currentUserId;
+    };
 
-    const currentUserId = computed(() => {
-      const data = store.getters["getCurrentUserId"];
-
-      return data;
-    });
+    init();
 
     const deleteVideo = async () => {
       const { status, errorMsg } = await store.dispatch("deleteVideo", { url });
@@ -95,16 +87,7 @@ export default defineComponent({
 
     onMounted(function () {
       const video = ref(document.querySelector("video"));
-
-      // video.value.src = getVideo.value.asdsads
-
-      // video.value.addEventListener("click", function () {
-      //   console.log("sadsads");
-      // });
-
-      // video.value.addEventListener("click",function(){
-      //   console.log("sadsad")
-      // })
+      console.log("temp", video.value);
 
       // video.addEventListener("contextmenu", (e: Event) => {
       //   e.preventDefault();
@@ -250,7 +233,7 @@ export default defineComponent({
       // video.addEventListener("click", handlePlay);
     });
 
-    return { getVideo, currentUserId, deleteVideo };
+    return { video, currentUserId, deleteVideo };
   },
 });
 </script>

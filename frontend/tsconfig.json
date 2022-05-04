@@ -7,7 +7,7 @@
     // strictNullChecks 설정 false 추가
     "strictNullChecks": false,
 
-    "typeRoots": ["./node_modules/@types"],
+    "typeRoots": ["./@types", "./node_modules/@types"],
 
     "jsx": "preserve",
     "moduleResolution": "node",
