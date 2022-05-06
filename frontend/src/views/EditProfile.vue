@@ -63,7 +63,7 @@ export default defineComponent({
       const { avatarUrl } = res.data.user;
 
       for (const key in form) {
-        form[key] = [key];
+        form[key] = res.data.user[key];
       }
 
       form.avatarUrl = `${baseURL}${avatarUrl}`;
