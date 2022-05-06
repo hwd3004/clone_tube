@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const local = false;
+const local = true;
 let address;
 
 local ? (address = "127.0.0.1") : (address = "mongodb-container");

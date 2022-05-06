@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts">
+// @ts-ignore
 import { instance } from "@/main";
 import { defineComponent, reactive, ref } from "@vue/runtime-core";
 
