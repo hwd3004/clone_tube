@@ -1,16 +1,7 @@
 <template>
   <div>
     <div id="videoContainer">
-      <video
-        v-bind:src="`http://localhost:4000/api${getVideo.fileUrl}`"
-        crossorigin="true"
-        controls
-      ></video>
-      <!-- <video
-        v-bind:src="`/api${getVideo.fileUrl}`"
-        crossorigin="true"
-        controls
-      ></video> -->
+      <video crossorigin="true" controls></video>
       <div id="videoControls">
         <button id="play">Play</button>
         <button id="mute">Mute</button>
@@ -36,15 +27,11 @@
     <p>{{ getVideo.createdAt }}</p>
     <p v-if="getVideo.owner">
       uploaded by
-      <router-link v-bind:to="`/users/${getVideo.owner._id}`">{{
-        getVideo.owner.name
-      }}</router-link>
+      <router-link v-bind:to="`/users/${getVideo.owner._id}`">{{ getVideo.owner.name }}</router-link>
     </p>
 
-    <div v-if="getVideo.owner && currentUserId == getVideo.owner._id">
-      <router-link v-bind:to="`/videos/${getVideo._id}/edit`"
-        ><button>Edit</button></router-link
-      >
+    <div v-if="getVideo.owner && getCurrentUserId == getVideo.owner._id">
+      <router-link v-bind:to="`/videos/${getVideo._id}/edit`"><button>Edit</button></router-link>
       &nbsp;
       <button @click="deleteVideo">Delete</button>
     </div>
@@ -52,15 +39,11 @@
 </template>
 
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  ref,
-  toRef,
-} from "@vue/runtime-core";
+import { computed, defineComponent, onUpdated, ref } from "@vue/runtime-core";
+import { Ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { local } from "../../main";
 
 export default defineComponent({
   setup() {
@@ -77,7 +60,7 @@ export default defineComponent({
       return data;
     });
 
-    const currentUserId = computed(() => {
+    const getCurrentUserId = computed(() => {
       const data = store.getters["getCurrentUserId"];
 
       return data;
@@ -93,164 +76,153 @@ export default defineComponent({
       }
     };
 
-    onMounted(function () {
+    onUpdated(function () {
       const video = ref(document.querySelector("video"));
 
-      // video.value.src = getVideo.value.asdsads
+      local
+        ? (video.value.src = `http://localhost:4000/api${getVideo.value.fileUrl}`)
+        : (video.value.src = `/api${getVideo.value.fileUrl}`);
 
-      // video.value.addEventListener("click", function () {
-      //   console.log("sadsads");
-      // });
+      video.value.addEventListener("contextmenu", (e: Event) => {
+        e.preventDefault();
+      });
 
-      // video.value.addEventListener("click",function(){
-      //   console.log("sadsad")
-      // })
+      let volumeValue: any = 0.5;
+      let controlsTimeout: any = null;
 
-      // video.addEventListener("contextmenu", (e: Event) => {
-      //   e.preventDefault();
-      // });
+      const playBtn = ref(document.querySelector("#play")) as Ref<HTMLButtonElement>;
+      const muteBtn = ref(document.querySelector("#mute")) as Ref<HTMLButtonElement>;
+      const currentTime = ref(document.querySelector("#currentTime")) as Ref<HTMLSpanElement>;
+      const totalTime = ref(document.querySelector("#totalTime")) as Ref<HTMLSpanElement>;
+      const volumeRange = ref(document.querySelector("#volume")) as Ref<HTMLInputElement>;
+      const timeline = ref(document.querySelector("#timeline")) as Ref<HTMLInputElement>;
+      const fullscreenBtn = ref(document.querySelector("#fullscreen")) as Ref<HTMLButtonElement>;
+      const videoContainer = ref(document.querySelector("#videoContainer")) as Ref<HTMLDivElement>;
+      const videoControls = ref(document.querySelector("#videoControls")) as Ref<HTMLDivElement>;
 
-      // let volumeValue: any = 0.5;
-      // let controlsTimeout: any = null;
+      volumeRange.value.value = volumeValue;
+      video.value.volume = volumeValue;
 
-      // const playBtn: HTMLButtonElement = document.querySelector("#play");
-      // const muteBtn: HTMLButtonElement = document.querySelector("#mute");
-      // const currentTime: HTMLSpanElement =
-      //   document.querySelector("#currentTime");
-      // const totalTime: HTMLSpanElement = document.querySelector("#totalTime");
-      // const volumeRange: HTMLInputElement = document.querySelector("#volume");
-      // const timeline: HTMLInputElement = document.querySelector("#timeline");
-      // const fullscreenBtn: HTMLButtonElement =
-      //   document.querySelector("#fullscreen");
-      // const videoContainer: HTMLDivElement =
-      //   document.querySelector("#videoContainer");
-      // const videoControls: HTMLDivElement =
-      //   document.querySelector("#videoControls");
+      const handlePlay = () => {
+        if (video.value.paused) {
+          video.value.play();
+          playBtn.value.innerText = "Pause";
+          setControls();
+        } else {
+          video.value.pause();
+          playBtn.value.innerText = "Play";
+          setControls();
+        }
+      };
 
-      // volumeRange.value = volumeValue;
-      // video.volume = volumeValue;
+      const handleMute = () => {
+        if (!video.value.muted) {
+          video.value.muted = true;
+          volumeRange.value.value = "0";
+        } else {
+          video.value.muted = false;
+          volumeRange.value.value = volumeValue;
+        }
+      };
 
-      // const handlePlay = () => {
-      //   if (video.paused) {
-      //     video.play();
-      //     playBtn.innerText = "Pause";
-      //     setControls();
-      //   } else {
-      //     video.pause();
-      //     playBtn.innerText = "Play";
-      //     setControls();
-      //   }
-      // };
+      const hanldeVolumeChange = (e: any) => {
+        const { value } = e.target;
 
-      // const handleMute = () => {
-      //   if (!video.muted) {
-      //     video.muted = true;
-      //     volumeRange.value = "0";
-      //   } else {
-      //     video.muted = false;
-      //     volumeRange.value = volumeValue;
-      //   }
-      // };
+        video.value.volume = value;
+        volumeValue = value;
+      };
 
-      // const hanldeVolumeChange = (e: any) => {
-      //   const { value } = e.target;
+      const handleLoadedMetadata = () => {
+        totalTime.value.innerText = formatTime(video.value.duration);
+        timeline.value.max = String(Math.floor(video.value.duration));
+      };
 
-      //   video.volume = value;
-      //   volumeValue = value;
-      // };
+      const handleTimeUpdate = () => {
+        currentTime.value.innerText = formatTime(video.value.currentTime);
+        timeline.value.value = String(Math.floor(video.value.currentTime));
+      };
 
-      // const handleLoadedMetadata = () => {
-      //   totalTime.innerText = formatTime(video.duration);
-      //   timeline.max = String(Math.floor(video.duration));
-      // };
+      const formatTime = (seconds: number) => {
+        return new Date(Math.floor(seconds) * 1000).toISOString().substring(11, 19);
+      };
 
-      // const handleTimeUpdate = () => {
-      //   currentTime.innerText = formatTime(video.currentTime);
-      //   timeline.value = String(Math.floor(video.currentTime));
-      // };
+      const handleTimelineChange = (e: any) => {
+        const { value } = e.target;
 
-      // const formatTime = (seconds: number) => {
-      //   return new Date(Math.floor(seconds) * 1000)
-      //     .toISOString()
-      //     .substring(11, 19);
-      // };
+        video.value.currentTime = value;
+      };
 
-      // const handleTimelineChange = (e: any) => {
-      //   const { value } = e.target;
+      const handleFullScreen = () => {
+        const fullscreen = document.fullscreenElement;
 
-      //   video.currentTime = value;
-      // };
+        if (fullscreen) {
+          document.exitFullscreen();
+          fullscreenBtn.value.innerText = "Enter Full Screen";
+        } else {
+          videoContainer.value.requestFullscreen();
+          fullscreenBtn.value.innerText = "Exit Full Screen";
+        }
+      };
 
-      // const handleFullScreen = () => {
-      //   const fullscreen = document.fullscreenElement;
+      const hideControls = () => {
+        videoControls.value.classList.add("hiding");
+      };
 
-      //   if (fullscreen) {
-      //     document.exitFullscreen();
-      //     fullscreenBtn.innerText = "Enter Full Screen";
-      //   } else {
-      //     videoContainer.requestFullscreen();
-      //     fullscreenBtn.innerText = "Exit Full Screen";
-      //   }
-      // };
+      const showControls = () => {
+        videoControls.value.classList.remove("hiding");
+      };
 
-      // const hideControls = () => {
-      //   videoControls.classList.add("hiding");
-      // };
+      const setControls = () => {
+        if (controlsTimeout) {
+          clearTimeout(controlsTimeout);
+          controlsTimeout = null;
+        }
 
-      // const showControls = () => {
-      //   videoControls.classList.remove("hiding");
-      // };
+        showControls();
 
-      // const setControls = () => {
-      //   if (controlsTimeout) {
-      //     clearTimeout(controlsTimeout);
-      //     controlsTimeout = null;
-      //   }
+        if (!video.value.paused) {
+          controlsTimeout = setTimeout(() => {
+            hideControls();
+          }, 1500);
+        }
+      };
 
-      //   showControls();
+      const handleMouseMove = () => {
+        // 기본 로직
+        // 1. 마우스를 움직이면 기존 setTimeout을 clearTimeout이 지우고, 새로운 setTimeout을 만들고 실행
+        // 2. 그 상태에서 마우스를 움직이지 않으면 setTimeout이 정해진 시간 후 메소드 실행
+        // 3. 시간이 흐르는 중에 움직이면 1번으로 돌아감
+        setControls();
+      };
 
-      //   if (!video.paused) {
-      //     controlsTimeout = setTimeout(() => {
-      //       hideControls();
-      //     }, 1500);
-      //   }
-      // };
+      const handleMouseLeave = () => {
+        // if (!video.paused) {
+        //   hideControls();
+        // }
+      };
 
-      // const handleMouseMove = () => {
-      //   // 기본 로직
-      //   // 1. 마우스를 움직이면 기존 setTimeout을 clearTimeout이 지우고, 새로운 setTimeout을 만들고 실행
-      //   // 2. 그 상태에서 마우스를 움직이지 않으면 setTimeout이 정해진 시간 후 메소드 실행
-      //   // 3. 시간이 흐르는 중에 움직이면 1번으로 돌아감
-      //   setControls();
-      // };
+      playBtn.value.addEventListener("click", handlePlay);
+      muteBtn.value.addEventListener("click", handleMute);
 
-      // const handleMouseLeave = () => {
-      //   // if (!video.paused) {
-      //   //   hideControls();
-      //   // }
-      // };
+      volumeRange.value.addEventListener("input", hanldeVolumeChange);
+      // change 대신 input으로 하면 볼륨 값을 실시간으로 받음
 
-      // playBtn.addEventListener("click", handlePlay);
-      // muteBtn.addEventListener("click", handleMute);
-      // volumeRange.addEventListener("input", hanldeVolumeChange);
-      // // change 대신 input으로 하면 볼륨 값을 실시간으로 받음
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loadedmetadata_event
+      video.value.addEventListener("loadedmetadata", handleLoadedMetadata);
 
-      // // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loadedmetadata_event
-      // //
-      // // video.onloadedmetadata = (event) => {
-      // //   console.log(event);
-      // // };
-      // //
-      // video.addEventListener("loadedmetadata", handleLoadedMetadata);
-      // video.addEventListener("timeupdate", handleTimeUpdate);
-      // timeline.addEventListener("input", handleTimelineChange);
-      // fullscreenBtn.addEventListener("click", handleFullScreen);
-      // video.addEventListener("mousemove", handleMouseMove);
-      // video.addEventListener("mouseleave", handleMouseLeave);
-      // video.addEventListener("click", handlePlay);
+      video.value.addEventListener("timeupdate", handleTimeUpdate);
+      timeline.value.addEventListener("input", handleTimelineChange);
+      fullscreenBtn.value.addEventListener("click", handleFullScreen);
+      video.value.addEventListener("mousemove", handleMouseMove);
+      video.value.addEventListener("mouseleave", handleMouseLeave);
+      video.value.addEventListener("click", handlePlay);
+
+      //
+      //
+      //
     });
 
-    return { getVideo, currentUserId, deleteVideo };
+    return { getVideo, getCurrentUserId, deleteVideo };
   },
 });
 </script>

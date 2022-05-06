@@ -1,9 +1,6 @@
 <template>
   <div>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <i class="fas fa-camera"></i>
     <i class="fas fa-youtube"></i>
 
@@ -60,4 +57,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+#ckeditor {
+  display: inline-block;
+}
+
+@media (max-width: 650px) {
+  #ckeditor {
+    display: inline;
+  }
+}
 </style>

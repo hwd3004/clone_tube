@@ -72,12 +72,12 @@ import { useStore } from "vuex";
 export default defineComponent({
   setup() {
     const form = reactive({
-      name: "",
-      email: "",
-      username: "",
-      password: "",
-      password2: "",
-      location: "",
+      name: "test",
+      email: "test@test.com",
+      username: "test",
+      password: "test",
+      password2: "test",
+      location: "test",
     });
 
     const store = useStore();

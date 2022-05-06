@@ -1,0 +1,1 @@
+https://stackoverflow.com/questions/61402468/how-make-veture-extension-in-vs-code-format-vue-file-so-that-html-attributes-ar

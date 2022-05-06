@@ -13,42 +13,21 @@
       <br />
       <label>
         <span>email - </span>
-        <input
-          v-model="form.email"
-          type="email"
-          namme="email"
-          placeholder="email"
-        />
+        <input v-model="form.email" type="email" namme="email" placeholder="email" />
       </label>
       <br />
       <label
         ><span>username - </span>
-        <input
-          v-model="form.username"
-          type="text"
-          name="username"
-          placeholder="username"
-        />
+        <input v-model="form.username" type="text" name="username" placeholder="username" />
       </label>
       <br />
       <label
         ><span>location - </span>
-        <input
-          v-model="form.location"
-          type="text"
-          name="location"
-          placeholder="location"
-        />
+        <input v-model="form.location" type="text" name="location" placeholder="location" />
         <br />
         <label>
           <span>avatar - </span>
-          <input
-            @change="changeFile"
-            type="file"
-            name="avatar"
-            placeholder="image"
-            accept="image/*"
-          />
+          <input @change="changeFile" type="file" name="avatar" placeholder="image" accept="image/*" />
         </label>
         <br />
         <input type="submit" />
@@ -81,12 +60,12 @@ export default defineComponent({
     const init = async () => {
       const res = await instance.get("/users/edit");
 
-      const { name, email, username, location, avatarUrl } = res.data.user;
+      const { avatarUrl } = res.data.user;
 
-      form.name = name;
-      form.email = email;
-      form.username = username;
-      form.location = location;
+      for (const key in form) {
+        form[key] = [key];
+      }
+
       form.avatarUrl = `${baseURL}${avatarUrl}`;
     };
 
@@ -100,10 +79,7 @@ export default defineComponent({
     const store = useStore();
 
     const handleSubmit = async () => {
-      const { status, errorMsg } = await store.dispatch(
-        "user/editProfile",
-        form
-      );
+      const { status, errorMsg } = await store.dispatch("user/editProfile", form);
 
       if (status == 200) {
         msg.value = "Updated Profile.";

@@ -11,12 +11,9 @@ const QuillEditor = require("@vueup/vue-quill");
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { getLsUser, getLsLoggedIn } from "./store/modules/user";
 
+import CKEditor from "@ckeditor/ckeditor5-vue";
 
-// import CKEditor from "@ckeditor/ckeditor5-vue";
-
-// console.log(CKEditor);
-
-const local = true;
+export const local = true;
 let address;
 
 local ? (address = "http://localhost:4000/api") : (address = "/api");
@@ -53,4 +50,4 @@ instance.interceptors.request.use(
   }
 );
 
-createApp(App).use(store).use(router).component("QuillEditor", QuillEditor).mount("#app");
+createApp(App).use(store).use(router).use(CKEditor).component("QuillEditor", QuillEditor).mount("#app");
