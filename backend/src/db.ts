@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const local = false;
 let address;
 
-local ? (address = "127.0.0.1") : (address = "172.18.0.2");
+local ? (address = "127.0.0.1") : (address = "mongodb-container");
 
 mongoose.connect(`mongodb://${address}:27017/clone_tube`);
 
