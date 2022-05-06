@@ -13,7 +13,7 @@ import { getLsUser, getLsLoggedIn } from "./store/modules/user";
 
 import CKEditor from "@ckeditor/ckeditor5-vue";
 
-export const local = true;
+export const local = false;
 let address;
 
 local ? (address = "http://localhost:4000/api") : (address = "/api");
