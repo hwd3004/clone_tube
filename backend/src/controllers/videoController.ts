@@ -5,6 +5,7 @@ import User from "../models/Users";
 import jwt from "jsonwebtoken";
 import { unlink, rm, rmdirSync, readFileSync } from "fs";
 import { Blob } from "buffer";
+import path from "path";
 
 const home = async (req: Request, res: Response) => {
   // https://mongoosejs.com/docs/api.html#query_Query-sort
@@ -34,27 +35,6 @@ const watch = async (req: Request, res: Response) => {
       currentUserId = user.id;
     }
 
-    //
-    console.log("=========================");
-    console.log(video.fileUrl);
-
-    console.log(`${process.cwd()}${video.fileUrl}`);
-
-    video.fileUrl = `${process.cwd()}${video.fileUrl}`;
-
-    // const asd1 = readFileSync(`${process.cwd()}${video.fileUrl}`);
-    // console.log(asd1);
-
-    // const asd2: any = new Blob([asd1], { type: "video/mp4" });
-    // console.log("asd2", asd2);
-
-    // const asd3 = URL.createObjectURL(asd2);
-    // console.log(asd3);
-
-    // video.fileUrl = `/${asd3}`;
-
-    console.log("=========================");
-    //
     return res.send({
       status: 200,
       pageTitle: video.title,

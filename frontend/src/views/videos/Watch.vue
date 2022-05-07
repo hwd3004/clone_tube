@@ -80,10 +80,7 @@ export default defineComponent({
       const video = ref(document.querySelector("video"));
 
       if (local) {
-        // video.value.src = `http://localhost:4000/api${getVideo.value.fileUrl}`;
-        //
-
-        // const asd1 = readFileSync(`http://localhost:4000/api${getVideo.value.fileUrl}`);
+        video.value.src = `http://localhost:4000/api${getVideo.value.fileUrl}`;
       } else {
         video.value.src = `/api${getVideo.value.fileUrl}`;
       }

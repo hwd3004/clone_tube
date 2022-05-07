@@ -76,7 +76,9 @@ export default createStore({
       try {
         const { url } = payload;
 
-        const { data } = await instance.get(url);
+        const res = await instance.get(url);
+
+        const { data } = res;
 
         context.commit("setVideo", data);
       } catch (error) {
