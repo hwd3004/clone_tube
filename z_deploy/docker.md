@@ -1,16 +1,10 @@
 ### 도커 이미지, 네트워크, 볼륨 생성
 
 ```
-sudo apt install docker.io
+apt install docker.io
 
-sudo docker pull mongo
+docker network create --driver bridge clone_tube-network
 
-sudo docker pull node:16.14.2
-
-sudo docker network create --driver bridge clone_tube-network
-```
-
-```
 docker volume create mongodb-volume
 
 docker volume inspect mongodb-volume
@@ -28,20 +22,30 @@ docker volume prune
 
 ```
 MongoDB 컨테이너 생성
-docker run --name mongodb-container -d -p 27017:27017 \
-    --network clone_tube-network \
-    -v mongodb-volume:/data/db \
-    -v /clone_tube/z_deploy/mongod.conf:/etc/mongod.conf \
-    mongo --config /etc/mongod.conf --wiredTigerCacheSizeGB 1
 
 docker run --name mongodb-container -d -p 27017:27017 \
     --network clone_tube-network \
     -v mongodb-volume:/data/db \
-    -v /clone_tube/z_deploy/mongod.conf:/etc/mongod.conf \
-    -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=!zxc456 \
-    mongo --config /etc/mongod.conf --wiredTigerCacheSizeGB 0.25
+    mongo --wiredTigerCacheSizeGB 0.25 --auth
 
-docker run --name mongodb-container -d -p 27017:27017 --network clone_tube-network -v mongodb-volume:/data/db mongo --wiredTigerCacheSizeGB 1
+docker run --name mongodb-container -d -p 27017:27017 ^
+    --network clone_tube-network ^
+    -v mongodb-volume:/data/db ^
+    mongo --wiredTigerCacheSizeGB 0.25 --auth
+```
+
+```
+docker exec -it mongodb-container mongo admin
+
+db.createUser({user: "admin", pwd: "admin4567", roles: [{role: "root", db: "admin"}]})
+
+docker exec -it mongodb-container mongo -u admin -p admin4567 --authenticationDatabase admin
+
+use clone_tube
+
+db.createUser({user: "clonetube", pwd: "clonetube4567", roles: [{role: "readWrite", db:"clone_tube"}]})
+
+docker exec -it mongodb-container mongo -u clonetube -p clonetube4567 --authenticationDatabase clone_tube
 ```
 
 ```
@@ -95,12 +99,13 @@ docker exec -it backend-clone_tube sh -c "cd /clone_tube/backend && npm start"
 
 docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i"
 
+docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm run serve"
+
 docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i -g serve"
 
 docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm run build"
 
-docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && serve -s dist"
-docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && serve -s dist"
+docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && serve -p 3000 -s -n dist"
 ```
 
 <hr/>

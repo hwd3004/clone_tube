@@ -35,6 +35,7 @@
 import { computed, defineComponent } from "vue";
 import { useStore } from "vuex";
 import SearchForm from "./components/SearchForm.vue";
+import { instance } from "./main";
 
 export default defineComponent({
   components: {
