@@ -63,8 +63,8 @@ app.use((req, res, next) => {
   // res.header("cross-origin-resource-Policy", "cross-origin");
   // res.header("Access-Control-Allow-Credentials", "true");
 
-  // const clientIp = requestIp.getClientIp(req);
-  // console.log(clientIp);
+  const clientIp = requestIp.getClientIp(req);
+  console.log(clientIp);
   // docker nginx 사용시 nginx ip가 뜸
 
   next();

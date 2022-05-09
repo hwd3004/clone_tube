@@ -38,6 +38,7 @@ const postJoin = async (req: Request, res: Response) => {
 
       return res.send({ status: 400, errorMsg: `This ${duplicateKey} is already exist.` });
     }
+    console.log(error);
     return res.send({ status: 400, errorMsg: "error" });
   }
 };

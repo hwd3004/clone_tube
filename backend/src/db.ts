@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
 
 const local = false;
-let address;
 
-local ? (address = "127.0.0.1") : (address = "mongodb-container");
+let uri;
 
-mongoose.connect(`mongodb://${address}:27017/clone_tube`);
+if (local) {
+  uri = `mongodb://127.0.0.1:27017/clone_tube`;
+} else {
+  uri = `mongodb://mongodb-container:27017/clone_tube`;
+}
+
+mongoose.connect(uri);
 
 const db = mongoose.connection;
 

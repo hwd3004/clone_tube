@@ -33,6 +33,15 @@ docker run --name mongodb-container -d -p 27017:27017 \
     -v mongodb-volume:/data/db \
     -v /clone_tube/z_deploy/mongod.conf:/etc/mongod.conf \
     mongo --config /etc/mongod.conf --wiredTigerCacheSizeGB 1
+
+docker run --name mongodb-container -d -p 27017:27017 \
+    --network clone_tube-network \
+    -v mongodb-volume:/data/db \
+    -v /clone_tube/z_deploy/mongod.conf:/etc/mongod.conf \
+    -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=!zxc456 \
+    mongo --config /etc/mongod.conf --wiredTigerCacheSizeGB 0.25
+
+docker run --name mongodb-container -d -p 27017:27017 --network clone_tube-network -v mongodb-volume:/data/db mongo --wiredTigerCacheSizeGB 1
 ```
 
 ```
@@ -67,11 +76,15 @@ docker inspect clone_tube-network
 <hr/>
 
 ```
+docker restart backend-clone_tube && docker restart frontend-clone_tube
+```
+
+```
 백엔드 실행
 
-sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i -g nodemon"
+docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i -g nodemon"
 
-sudo docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i"
+docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm i"
 
 docker exec -itd backend-clone_tube sh -c "cd /clone_tube/backend && npm start"
 docker exec -it backend-clone_tube sh -c "cd /clone_tube/backend && npm start"
@@ -80,13 +93,14 @@ docker exec -it backend-clone_tube sh -c "cd /clone_tube/backend && npm start"
 ```
 프론트 실행
 
-sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i"
+docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i"
 
-sudo docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm run build"
+docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i -g serve"
 
-docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i -g serve"
+docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm run build"
 
 docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && serve -s dist"
+docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && serve -s dist"
 ```
 
 <hr/>
