@@ -101,11 +101,11 @@ docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i"
 
 docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm run serve"
 
-docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i -g serve"
+docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && npm i -g serve"
 
 docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && npm run build"
 
-docker exec -it frontend-clone_tube sh -c "cd /clone_tube/frontend && serve -p 3000 -s -n dist"
+docker exec -itd frontend-clone_tube sh -c "cd /clone_tube/frontend && serve -s -n dist"
 ```
 
 <hr/>
