@@ -33,6 +33,7 @@ const postJoin = async (req: Request, res: Response) => {
 
     return res.send({ status: 200 });
   } catch (error: any) {
+    console.log(error);
     if (error.code == 11000) {
       const duplicateKey = Object.keys(error.keyValue)[0];
 
