@@ -43,31 +43,38 @@ export const filterUnauthorized = (resolver: any) => {
   };
 };
 
-export const avatarFileUpload = async (req_files: fileUpload.FileArray, id: any) => {
+export const avatarFileUpload = async (req_file: fileUpload.FileArray | undefined, id: string) => {
   try {
-    if (!req_files || Object.keys(req_files).length == 0) {
+    if (!req_file) {
       return {
         status: false,
       };
     }
 
-    const key = Object.keys(req_files)[0];
-    const file: any = req_files[key];
-    const mimetype: string = file.mimetype;
+    const file: fileUpload.UploadedFile = req_file["avatar"] as fileUpload.UploadedFile;
 
-    if (mimetype.split("/")[0] != "image") {
+    if (file.mimetype.split("/")[0] != "image") {
       return {
         status: false,
         errorMsg: "File is not Image.",
       };
     }
 
-    if (mimetype == "image/gif") {
+    if (file.mimetype == "image/gif") {
       return {
         status: false,
         errorMsg: "It cannot upload gif file.",
       };
     }
+
+    const userObj = await User.findById(id);
+
+    // 이전 파일 삭제
+    unlink(`${process.cwd()}/${userObj.avatarUrl}`, (error: any) => {
+      if (error) {
+        console.log(error);
+      }
+    });
 
     const uploadPath = `${process.cwd()}/uploads/avatar/${id}`;
 
@@ -78,15 +85,6 @@ export const avatarFileUpload = async (req_files: fileUpload.FileArray, id: any)
     file.mv(`${uploadPath}/${file.name}`);
 
     const avatarUrl = `/uploads/avatar/${id}/${file.name}`;
-
-    const userObj = await User.findById(id);
-
-    // 이전 파일 삭제
-    unlink(`${process.cwd()}/${userObj.avatarUrl}`, (error: any) => {
-      if (error) {
-        console.log(error);
-      }
-    });
 
     return {
       status: true,
@@ -102,20 +100,77 @@ export const avatarFileUpload = async (req_files: fileUpload.FileArray, id: any)
   }
 };
 
-export const videoFileUpload = async (req_files: fileUpload.FileArray, id: any, title: any) => {
+// export const avatarFileUpload = async (req_files: fileUpload.FileArray | undefined, id: any) => {
+//   try {
+//     if (!req_files || Object.keys(req_files).length == 0) {
+//       return {
+//         status: false,
+//       };
+//     }
+
+//     const key = Object.keys(req_files)[0];
+//     const file: any = req_files[key];
+//     const mimetype: string = file.mimetype;
+
+//     if (mimetype.split("/")[0] != "image") {
+//       return {
+//         status: false,
+//         errorMsg: "File is not Image.",
+//       };
+//     }
+
+//     if (mimetype == "image/gif") {
+//       return {
+//         status: false,
+//         errorMsg: "It cannot upload gif file.",
+//       };
+//     }
+
+//     const userObj = await User.findById(id);
+
+//     // 이전 파일 삭제
+//     unlink(`${process.cwd()}/${userObj.avatarUrl}`, (error: any) => {
+//       if (error) {
+//         console.log(error);
+//       }
+//     });
+
+//     const uploadPath = `${process.cwd()}/uploads/avatar/${id}`;
+
+//     if (!existsSync(uploadPath)) {
+//       mkdirSync(uploadPath, { recursive: true });
+//     }
+
+//     file.mv(`${uploadPath}/${file.name}`);
+
+//     const avatarUrl = `/uploads/avatar/${id}/${file.name}`;
+
+//     return {
+//       status: true,
+//       avatarUrl,
+//     };
+//   } catch (error) {
+//     console.log("file error");
+//     console.log(error);
+//     return {
+//       status: false,
+//       errorMsg: "error",
+//     };
+//   }
+// };
+
+export const videoFileUpload = async (req_file: fileUpload.FileArray | undefined, id: string, title: string) => {
   try {
-    if (!req_files || Object.keys(req_files).length == 0) {
+    if (!req_file) {
       return {
         status: false,
         errorMsg: "Video File is empty.",
       };
     }
 
-    const key = Object.keys(req_files)[0];
-    const file: any = req_files[key];
-    const mimetype: string = file.mimetype;
+    const file: fileUpload.UploadedFile = req_file["video"] as fileUpload.UploadedFile;
 
-    if (mimetype.split("/")[0] != "video") {
+    if (file.mimetype.split("/")[0] != "video") {
       return {
         status: false,
         errorMsg: "File is not Video.",
@@ -146,3 +201,48 @@ export const videoFileUpload = async (req_files: fileUpload.FileArray, id: any, 
     };
   }
 };
+
+// export const videoFileUpload = async (req_files: fileUpload.FileArray, id: any, title: any) => {
+//   try {
+//     if (!req_files || Object.keys(req_files).length == 0) {
+//       return {
+//         status: false,
+//         errorMsg: "Video File is empty.",
+//       };
+//     }
+
+//     const key = Object.keys(req_files)[0];
+//     const file: any = req_files[key];
+//     const mimetype: string = file.mimetype;
+
+//     if (mimetype.split("/")[0] != "video") {
+//       return {
+//         status: false,
+//         errorMsg: "File is not Video.",
+//       };
+//     }
+
+//     const dateNow = Date.now();
+
+//     const uploadPath = `${process.cwd()}/uploads/video/${id}/${dateNow}/${title}`;
+
+//     if (!existsSync(uploadPath)) {
+//       mkdirSync(uploadPath, { recursive: true });
+//     }
+
+//     file.mv(`${uploadPath}/${file.name}`);
+
+//     const fileUrl = `/uploads/video/${id}/${dateNow}/${title}/${file.name}`;
+
+//     return {
+//       status: true,
+//       fileUrl,
+//     };
+//   } catch (error) {
+//     console.log(error);
+//     return {
+//       status: false,
+//       errorMsg: "error",
+//     };
+//   }
+// };

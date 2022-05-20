@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import { unlink, rm, rmdirSync, readFileSync, rmSync } from "fs";
 import { Blob } from "buffer";
 import path from "path";
+import fileUpload from "express-fileupload";
 
 const home = async (req: Request, res: Response) => {
   // https://mongoosejs.com/docs/api.html#query_Query-sort
@@ -223,11 +224,11 @@ const deleteVideo = async (req: Request, res: Response, next: NextFunction, payl
 const getUpload = (req: Request, res: Response) => res.send("Upload");
 const postUpload = async (req: Request, res: Response, next: NextFunction, payload: any) => {
   try {
-    const { title, description, hashtags } = req.body;
+    const { title, description, hashtags }: { title: string; description: string; hashtags: string } = req.body;
 
-    const { id } = payload;
+    const { id }: { id: string } = payload;
 
-    const file: any = req.files;
+    const file = req.files;
 
     const { status, errorMsg, fileUrl } = await videoFileUpload(file, id, title);
 

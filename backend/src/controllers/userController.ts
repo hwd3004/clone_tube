@@ -133,11 +133,11 @@ const getEdit = async (req: Request, res: Response, _next: NextFunction, payload
 
 const postEdit = async (req: Request, res: Response, _next: NextFunction, payload: any) => {
   try {
-    const { id } = payload;
+    const { id }: { id: string } = payload;
 
     const { name, email, username, location } = req.body;
 
-    const file: any = req.files;
+    const file = req.files;
 
     const { status, avatarUrl, errorMsg } = await avatarFileUpload(file, id);
 

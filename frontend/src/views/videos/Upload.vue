@@ -6,7 +6,7 @@
       <video id="preview"></video>
     </div> -->
     <form id="form" v-on:submit.prevent="handleSubmit">
-      <input type="file" accept="video/*" required name="video" @change="changeVideo" />
+      <input type="file" accept="video/*" name="video" @change="changeVideo" />
       <br />
       <input type="text" name="title" placeholder="title" required maxlength="80" v-model="form.title" />
       <br />
