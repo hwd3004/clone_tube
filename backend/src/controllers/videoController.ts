@@ -3,7 +3,7 @@ import Video from "../models/Videos";
 import { filterUnauthorized, videoFileUpload } from "../util";
 import User from "../models/Users";
 import jwt from "jsonwebtoken";
-import { unlink, rm, rmdirSync, readFileSync } from "fs";
+import { unlink, rm, rmdirSync, readFileSync, rmSync } from "fs";
 import { Blob } from "buffer";
 import path from "path";
 
@@ -175,11 +175,24 @@ const deleteVideo = async (req: Request, res: Response, next: NextFunction, payl
 
     const fileUrlStringArray = fileUrl.split("/");
 
-    rmdirSync(
+    // rmdirSync는 폐기 예정
+    // rmdirSync(
+    //   `${process.cwd()}/${fileUrlStringArray[1]}/${fileUrlStringArray[2]}/${fileUrlStringArray[3]}/${
+    //     fileUrlStringArray[4]
+    //   }`,
+    //   { recursive: true }
+    // );
+
+    rm(
       `${process.cwd()}/${fileUrlStringArray[1]}/${fileUrlStringArray[2]}/${fileUrlStringArray[3]}/${
         fileUrlStringArray[4]
       }`,
-      { recursive: true }
+      { recursive: true },
+      (error) => {
+        if (error) {
+          errorState = true;
+        }
+      }
     );
 
     if (errorState) {
