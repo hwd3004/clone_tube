@@ -5,9 +5,8 @@
       <video crossorigin="true"></video>
 
       <div id="videoControls">
-        <!-- <button id="play">Play</button> -->
-        <button id="play"><i class="fa-solid fa-play"></i></button>
-        <button id="mute"><i class="fa-solid fa-volume-high"></i></button>
+        <button id="play">Play</button>
+        <button id="mute">Mute</button>
         <input id="volume" type="range" min="0" max="1" step="0.01" />
         <span>
           <span id="currentTime">00:00:00</span>
@@ -111,11 +110,11 @@ export default defineComponent({
       const handlePlay = () => {
         if (video.value.paused) {
           video.value.play();
-          playBtn.value.innerHTML = '<i class="fa-solid fa-pause"></i>';
+          playBtn.value.innerText = "Pause";
           setControls();
         } else {
           video.value.pause();
-          playBtn.value.innerHTML = '<i class="fa-solid fa-play"></i>';
+          playBtn.value.innerText = "Play";
           setControls();
         }
       };
@@ -124,29 +123,19 @@ export default defineComponent({
         if (!video.value.muted) {
           video.value.muted = true;
           volumeRange.value.value = "0";
-          muteBtn.value.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+          muteBtn.value.innerText = "Unmute";
         } else {
           video.value.muted = false;
           volumeRange.value.value = volumeValue;
-
-          if (parseFloat(volumeValue) >= 0.5) {
-            muteBtn.value.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-          } else if (parseFloat(volumeValue) < 0.5) {
-            muteBtn.value.innerHTML = '<i class="fa-solid fa-volume-low"></i>';
-          }
+          muteBtn.value.innerText = "Mute";
         }
       };
 
       const hanldeVolumeChange = (e: any) => {
         const { value } = e.target;
 
-        if (parseFloat(value) >= 0.5) {
-          muteBtn.value.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-        } else if (parseFloat(value) < 0.5) {
-          muteBtn.value.innerHTML = '<i class="fa-solid fa-volume-low"></i>';
-        }
-
         video.value.muted = false;
+        muteBtn.value.innerText = "Mute";
         video.value.volume = value;
         volumeValue = value;
       };
@@ -262,17 +251,9 @@ export default defineComponent({
     left: 50%;
     transform: translate(-50%);
     bottom: 2%;
+
     width: 100%;
     text-align: center;
-    font-size: 30px;
-    color: white;
-
-    button {
-      background-color: rgba(0, 0, 0, 0);
-      border: 0;
-      font-size: 30px;
-      color: white;
-    }
   }
 
   @media (max-width: 960px) {

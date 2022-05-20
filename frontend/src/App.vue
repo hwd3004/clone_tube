@@ -1,11 +1,10 @@
 <template>
   <div>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <i class="fas fa-camera"></i>
-    <i class="fas fa-youtube"></i>
-
-    <div id="nav">
-      <router-link to="/">Home</router-link>
+    <!-- index.html에 -->
+    <!-- <script src="https://kit.fontawesome.com/6ebbd4032b.js" crossorigin="anonymous"></script> -->
+    <!-- 추가 -->
+    <nav>
+      <router-link to="/"><i class="fab fa-youtube"></i></router-link>
       <span> | </span>
       <span v-if="!auth.loggedIn">
         <router-link to="/join">Join</router-link>
@@ -21,7 +20,7 @@
       </span>
       <span> | </span>
       <router-link to="/dummy">Dummy</router-link>
-    </div>
+    </nav>
 
     <SearchForm />
 
@@ -58,6 +57,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+/* @import "./scss/styles.scss"; */
+
 #ckeditor {
   display: inline-block;
 }
