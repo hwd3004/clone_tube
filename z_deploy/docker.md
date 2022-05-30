@@ -34,6 +34,8 @@ docker run --name mongodb-container -d -p 27017:27017 ^
     mongo --wiredTigerCacheSizeGB 0.25 --auth
 ```
 
+docker run --name temp-mongodb -d -p 27017:27017 --network host mongo
+
 ```
 docker exec -it mongodb-container mongo admin
 
@@ -168,3 +170,13 @@ docker exec -it frontend-clone_tube bash
 
 docker exec -it mongodb-container bash
 ```
+
+docker network create --driver bridge clone_tube-network
+
+docker run -d -it --name clone_tube-container --network clone_tube-network -v C:\workspace\clone_tube:/clone_tube -p 3000:3000 -p 4000:4000 node:16.14.2
+
+docker exec -it clone_tube-container bash
+
+npm i -g typescript  && npm i -g nodemon
+
+docker run --name mongodb-container --network clone_tube-network -d -p 27017:27017 mongo

@@ -5,7 +5,8 @@ const local = true;
 let uri;
 
 if (local) {
-  uri = `mongodb://127.0.0.1:27017/clone_tube`;
+  // uri = `mongodb://127.0.0.1:27017/clone_tube`;
+  uri = `mongodb://mongodb-container:27017/clone_tube`;
 } else {
   uri = `mongodb://clonetube:clonetube4567@mongodb-container:27017/clone_tube`;
 }
