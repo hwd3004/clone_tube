@@ -179,4 +179,4 @@ docker exec -it clone_tube-container bash
 
 npm i -g typescript  && npm i -g nodemon
 
-docker run --name mongodb-container --network clone_tube-network -d -p 27017:27017 mongo
+docker run --name mongodb-container -d -p 27017:27017 mongo
