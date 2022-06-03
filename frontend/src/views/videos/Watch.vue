@@ -177,9 +177,12 @@ export default defineComponent({
         if (fullscreen) {
           document.exitFullscreen();
           fullscreenBtn.value.innerText = "Enter Full Screen";
+          video.value.style.width = "1000px";
         } else {
           videoContainer.value.requestFullscreen();
           fullscreenBtn.value.innerText = "Exit Full Screen";
+          video.value.style.width = "100%";
+          video.value.style.height = "100%";
         }
       };
 

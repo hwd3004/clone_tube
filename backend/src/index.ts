@@ -35,7 +35,12 @@ app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
 // app.use(cors());
 
 // https://www.npmjs.com/package/express-fileupload
-app.use(fileUpload());
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+  })
+);
 
 app.use(express.json());
 
