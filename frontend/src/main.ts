@@ -13,7 +13,7 @@ import { getLsUser, getLsLoggedIn } from "./store/modules/user";
 
 import CKEditor from "@ckeditor/ckeditor5-vue";
 
-export const local = false;
+export const local = true;
 let address;
 
 local ? (address = "http://localhost:4000/api") : (address = "/api");
@@ -51,17 +51,3 @@ instance.interceptors.request.use(
 );
 
 createApp(App).use(store).use(router).use(CKEditor).component("QuillEditor", QuillEditor).mount("#app");
-
-let wakeLock = null;
-
-// 모바일에서 영상 시청 후 터치가 없으면 잠금 화면으로 이동되는 폰이 있음
-const requestWakeLock = async () => {
-  try {
-    wakeLock = await navigator["wakeLock"].request("screen");
-    console.log(wakeLock);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-requestWakeLock();

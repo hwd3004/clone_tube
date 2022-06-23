@@ -4,6 +4,9 @@
       <!-- <video crossorigin="true" controls></video> -->
       <video crossorigin="true"></video>
 
+      <div id="leftBox"></div>
+      <div id="rightBox"></div>
+
       <div id="videoControls">
         <!-- <button id="play">Play</button> -->
         <button id="play"><i class="fa-solid fa-play"></i></button>
@@ -104,9 +107,15 @@ export default defineComponent({
       const fullscreenBtn = ref(document.querySelector("#fullscreen")) as Ref<HTMLButtonElement>;
       const videoContainer = ref(document.querySelector("#videoContainer")) as Ref<HTMLDivElement>;
       const videoControls = ref(document.querySelector("#videoControls")) as Ref<HTMLDivElement>;
+      const leftBox = ref(document.querySelector("#leftBox")) as Ref<HTMLDivElement>;
+      const rightBox = ref(document.querySelector("#rightBox")) as Ref<HTMLDivElement>;
 
       volumeRange.value.value = volumeValue;
       video.value.volume = volumeValue;
+
+      //
+      //
+      //
 
       const handlePlay = () => {
         if (video.value.paused) {
@@ -240,6 +249,38 @@ export default defineComponent({
       video.value.addEventListener("click", handlePlay);
 
       //
+
+      let lastTap: any;
+
+      const doubleTap = (type: string) => {
+        const now = new Date().getTime();
+
+        const timeSince = now - lastTap;
+
+        if (timeSince < 600 && timeSince > 0) {
+          if (type == "left") {
+            video.value.currentTime -= 10;
+          } else {
+            video.value.currentTime += 10;
+          }
+        } else {
+          handlePlay();
+        }
+
+        lastTap = new Date().getTime();
+      };
+
+      leftBox.value.addEventListener("click", () => {
+        doubleTap("left");
+      });
+      rightBox.value.addEventListener("click", () => {
+        doubleTap("right");
+      });
+
+      leftBox.value.addEventListener("mousemove", handleMouseMove);
+      rightBox.value.addEventListener("mousemove", handleMouseMove);
+
+      //
       //
       //
     });
@@ -260,6 +301,24 @@ export default defineComponent({
     width: 1000px;
   }
 
+  #leftBox,
+  #rightBox {
+    width: 20%;
+    height: 100%;
+    background-color: rgba($color: red, $alpha: 0);
+    z-index: 100;
+    position: absolute;
+    top: 0;
+  }
+
+  #leftBox {
+    left: 0;
+  }
+
+  #rightBox {
+    right: 0;
+  }
+
   #videoControls {
     position: absolute;
     left: 50%;
@@ -268,19 +327,30 @@ export default defineComponent({
     width: 100%;
     text-align: center;
     font-size: 30px;
-    color: white;
+    z-index: 200;
+
+    * {
+      color: white;
+      text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    }
 
     button {
       background-color: rgba(0, 0, 0, 0);
       border: 0;
       font-size: 30px;
-      color: white;
     }
   }
 
   @media (max-width: 960px) {
     video {
       width: 100%;
+    }
+
+    #videoControls {
+      font-size: 20px;
+      * {
+        font-size: 20px;
+      }
     }
   }
 }
