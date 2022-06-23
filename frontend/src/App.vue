@@ -54,7 +54,8 @@ export default defineComponent({
     // 모바일에서 영상 시청 후 터치가 없으면 잠금 화면으로 이동되는 폰이 있음
     const requestWakeLock = async () => {
       try {
-        await navigator["wakeLock"].request("screen");
+        const wakeLock = await navigator["wakeLock"].request("screen");
+        console.log(wakeLock);
       } catch (error) {
         console.log(error);
       }
