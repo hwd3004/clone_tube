@@ -51,6 +51,17 @@ export default defineComponent({
       await store.dispatch("user/logout");
     };
 
+    // 모바일에서 영상 시청 후 터치가 없으면 잠금 화면으로 이동되는 폰이 있음
+    const requestWakeLock = async () => {
+      try {
+        await navigator["wakeLock"].request("screen");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    requestWakeLock();
+
     return { auth, logout };
   },
 });
